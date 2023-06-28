@@ -77,7 +77,7 @@ export async function getMe(req: Request, res: Response) {
 
 
 
-// update a user
+// update a user not their password
 export async function updateUser(req: Request, res: Response) {
 
    try {
@@ -96,6 +96,26 @@ export async function updateUser(req: Request, res: Response) {
          return res.status(404).json({ message: 'No user with this id!' });
       }
       res.json(updatedUser);
+
+   } catch (error) {
+      console.error(error);
+      res.status(500).json(error);
+   }
+
+}
+export async function updatePassword(req: Request, res: Response) {
+
+   try {
+      const user: IUser | null = await User.findById(req.params.id).select('-__v');
+
+
+      if (!user) {
+         return res.status(404).json({ message: 'No user with this id!' });
+      }
+
+      user.password = req.body.password;
+      await user.save();
+      res.json("success");
 
    } catch (error) {
       console.error(error);

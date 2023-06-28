@@ -1,10 +1,10 @@
-import { Schema, model, ObjectId } from 'mongoose';
+import { Schema, model, ObjectId, Document } from 'mongoose';
 import bcrypt from "bcrypt";
 
 
 
 
-export interface IUser {
+export interface IUser extends Document {
    _id: ObjectId;
    username: string;
    email: string;

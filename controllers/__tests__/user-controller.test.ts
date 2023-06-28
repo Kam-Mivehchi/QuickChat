@@ -125,7 +125,7 @@ describe('UserController', () => {
       });
       it("update password", async () => {
 
-         const response = await request.put(`/api/users/${test_user._id}`).send({ password: "newpassword" })
+         const response = await request.put(`/api/users/${test_user._id}/recovery`).send({ password: "newpassword" })
          // allUsers.res.should.have.lengthOf.at.least(1);
          expect(response.status).to.equal(200);
 

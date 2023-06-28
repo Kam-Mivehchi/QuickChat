@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.updateUser = exports.getMe = exports.getUsers = exports.login = exports.register = void 0;
+exports.deleteUser = exports.updatePassword = exports.updateUser = exports.getMe = exports.getUsers = exports.login = exports.register = void 0;
 const user_1 = __importDefault(require("../models/user"));
 const auth_1 = require("../utils/auth");
 //create an account and token
@@ -85,7 +85,7 @@ function getMe(req, res) {
     });
 }
 exports.getMe = getMe;
-// update a user
+// update a user not their password
 function updateUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -107,6 +107,24 @@ function updateUser(req, res) {
     });
 }
 exports.updateUser = updateUser;
+function updatePassword(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const user = yield user_1.default.findById(req.params.id).select('-__v');
+            if (!user) {
+                return res.status(404).json({ message: 'No user with this id!' });
+            }
+            user.password = req.body.password;
+            yield user.save();
+            res.json("success");
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json(error);
+        }
+    });
+}
+exports.updatePassword = updatePassword;
 // delete user 
 function deleteUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
