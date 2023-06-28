@@ -8,12 +8,21 @@ export interface IChatroom {
    lastMessage: ObjectId;
    admin: ObjectId;
    isGroup: () => boolean;
+
+}
+export interface INewChatroom {
+   roomName?: string;
+   members?: ObjectId[];
+   lastMessage?: ObjectId;
+   admin?: ObjectId;
+
 }
 
 const chatroomSchema = new Schema<IChatroom>(
    {
       roomName: {
          type: String,
+         default: "New Chat",
          trim: true,
       },
       members: [
@@ -39,7 +48,7 @@ const chatroomSchema = new Schema<IChatroom>(
    }
 )
 
-chatroomSchema.virtual('isGroupChat').get(function () {
+chatroomSchema.virtual('isGroup').get(function () {
    return this.members.length > 2;
 });
 

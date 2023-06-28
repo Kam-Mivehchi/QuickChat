@@ -12,6 +12,14 @@ export interface IUser {
    avatar?: string;
    isCorrectPassword: (password: string) => boolean;
 }
+export interface INewUser {
+   _id?: ObjectId;
+   username: string;
+   email: string;
+   password: string;
+   avatar?: string;
+   isCorrectPassword?: (password: string) => boolean;
+}
 
 const userSchema = new Schema<IUser>(
    {

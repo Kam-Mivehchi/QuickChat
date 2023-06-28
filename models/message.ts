@@ -4,10 +4,11 @@ export interface IMessage {
    _id: ObjectId;
    chatroom: ObjectId;
    content: string;
-
+   sender: ObjectId;
 }
 
-const messageSchema = new Schema(
+
+const messageSchema = new Schema<IMessage>(
    {
       sender: {
          type: Types.ObjectId,

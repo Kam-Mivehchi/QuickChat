@@ -4,6 +4,7 @@ const mongoose_1 = require("mongoose");
 const chatroomSchema = new mongoose_1.Schema({
     roomName: {
         type: String,
+        default: "New Chat",
         trim: true,
     },
     members: [
@@ -26,7 +27,7 @@ const chatroomSchema = new mongoose_1.Schema({
         virtuals: true,
     },
 });
-chatroomSchema.virtual('isGroupChat').get(function () {
+chatroomSchema.virtual('isGroup').get(function () {
     return this.members.length > 2;
 });
 exports.default = (0, mongoose_1.model)("Chat", chatroomSchema);
