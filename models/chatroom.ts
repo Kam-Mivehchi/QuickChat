@@ -42,6 +42,7 @@ const chatroomSchema = new Schema<IChatroom>(
    },
    {
       timestamps: true,
+      id: false,
       toJSON: {
          virtuals: true,
       },

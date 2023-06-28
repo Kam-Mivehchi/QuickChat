@@ -23,6 +23,7 @@ const chatroomSchema = new mongoose_1.Schema({
     },
 }, {
     timestamps: true,
+    id: false,
     toJSON: {
         virtuals: true,
     },

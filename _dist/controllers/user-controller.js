@@ -12,9 +12,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.deleteUser = exports.updateUser = exports.createUser = exports.getSingleUser = exports.getUsers = void 0;
+exports.deleteUser = exports.updateUser = exports.getMe = exports.getUsers = exports.login = exports.register = void 0;
 const user_1 = __importDefault(require("../models/user"));
 const auth_1 = require("../utils/auth");
+//create an account and token
+function register(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const user = yield user_1.default.create(req.body);
+            const { _id, username, email } = user;
+            if (!user) {
+                return res.status(400).json({ message: 'Something is wrong!' });
+            }
+            const token = (0, auth_1.generateToken)({ _id, username, email });
+            res.json({ token, user });
+            // res.json(newUser);
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json(error);
+        }
+    });
+}
+exports.register = register;
+//login
+function login({ body }, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user = yield user_1.default.findOne({ $or: [{ username: body.username }, { email: body.email }] }).select('-__v');
+        if (!user) {
+            return res.status(400).json({ message: "Can't find this user" });
+        }
+        const { _id, username, email } = user;
+        const correctPw = yield user.isCorrectPassword(body.password);
+        if (!correctPw) {
+            return res.status(400).json({ message: 'Wrong password!' });
+        }
+        const token = (0, auth_1.generateToken)({ _id, username, email });
+        res.json({ token, user });
+    });
+}
+exports.login = login;
 // get all users
 function getUsers(_req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -31,7 +68,7 @@ function getUsers(_req, res) {
 }
 exports.getUsers = getUsers;
 // get single user by id
-function getSingleUser(req, res) {
+function getMe(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const user = yield user_1.default.findOne({ _id: req.params.id })
@@ -47,27 +84,7 @@ function getSingleUser(req, res) {
         }
     });
 }
-exports.getSingleUser = getSingleUser;
-// create a new user
-function createUser(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const newUser = yield user_1.default.create(req.body);
-            const { _id, username, email } = newUser;
-            if (!newUser) {
-                return res.status(400).json({ message: 'Something is wrong!' });
-            }
-            const token = (0, auth_1.generateToken)({ _id, username, email });
-            res.json({ token, newUser });
-            // res.json(newUser);
-        }
-        catch (error) {
-            console.error(error);
-            res.status(500).json(error);
-        }
-    });
-}
-exports.createUser = createUser;
+exports.getMe = getMe;
 // update a user
 function updateUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -77,7 +94,7 @@ function updateUser(req, res) {
             }, {
                 runValidators: true,
                 new: true,
-            });
+            }).select('-__v');
             if (!updatedUser) {
                 return res.status(404).json({ message: 'No user with this id!' });
             }
@@ -104,19 +121,3 @@ function deleteUser(req, res) {
     });
 }
 exports.deleteUser = deleteUser;
-function login({ body }, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const user = yield user_1.default.findOne({ $or: [{ username: body.username }, { email: body.email }] });
-        if (!user) {
-            return res.status(400).json({ message: "Can't find this user" });
-        }
-        const { _id, username, email } = user;
-        const correctPw = yield user.isCorrectPassword(body.password);
-        if (!correctPw) {
-            return res.status(400).json({ message: 'Wrong password!' });
-        }
-        const token = (0, auth_1.generateToken)({ _id, username, email });
-        res.json({ token, user });
-    });
-}
-exports.login = login;

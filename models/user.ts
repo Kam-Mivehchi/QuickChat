@@ -10,6 +10,7 @@ export interface IUser {
    email: string;
    password: string;
    avatar?: string;
+   bio?: string;
    isCorrectPassword: (password: string) => boolean;
 }
 export interface INewUser {
@@ -18,6 +19,7 @@ export interface INewUser {
    email: string;
    password: string;
    avatar?: string;
+   bio?: string;
    isCorrectPassword?: (password: string) => boolean;
 }
 
@@ -42,6 +44,11 @@ const userSchema = new Schema<IUser>(
          minlength: 8,
          trim: true,
       },
+      bio: {
+         type: String,
+         default: "Share something about yourself",
+         trim: true,
+      },
       avatar: {
          type: String,
          default: "https://robohash.org/mail@ashallendesign.co.uk",
@@ -51,6 +58,8 @@ const userSchema = new Schema<IUser>(
       toJSON: {
          virtuals: true,
       },
+      id: false,
+
    }
 );
 
