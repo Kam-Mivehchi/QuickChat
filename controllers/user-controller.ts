@@ -142,6 +142,8 @@ export async function deleteUser(req: Request, res: Response) {
    }
 
 }
+//get all chatrooms for a single user
+export async function getUserChats(req: Request, res: Response) { }
 
 
 

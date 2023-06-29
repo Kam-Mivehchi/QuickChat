@@ -5,16 +5,13 @@ import { Request, Response } from 'express';
 // get single room
 export async function getSingleChat(req: Request, res: Response) { }
 
-//get all chatrooms for a single user
-export async function getUserChats(req: Request, res: Response) { }
+
 
 //create new room
-export async function createChat(req: Request, res: Response) { }
+export async function createChat(req: Request, res: Response) {
 
-//join a Chat
-export async function joinChat(req: Request, res: Response) { }
-//leave a Chat
-export async function leaveChat(req: Request, res: Response) { }
+   // should be a fallback for getSingleChat
+}
 
 //add members
 export async function addMemberToChat(req: Request, res: Response) { }

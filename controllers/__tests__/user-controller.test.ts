@@ -155,6 +155,16 @@ describe('User Routes', () => {
 
 
       })
+      it("get all chats for single User", async () => {
+         const response = await request.get(`/api/users/${test_user._id}/chats`)
+
+         expect(response.status).to.equal(200);
+         expect(response.body).to.be.an('array');
+         expect(response.body[0]).to.have.all.keys('_id', "roomName", "members", "lastMessage", "admin", "isGroup");
+
+         //add code to make sure the user is in each chat
+
+      });
 
    })
 });

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.updatePassword = exports.updateUser = exports.getMe = exports.getUsers = exports.login = exports.register = void 0;
+exports.getUserChats = exports.deleteUser = exports.updatePassword = exports.updateUser = exports.getMe = exports.getUsers = exports.login = exports.register = void 0;
 const user_1 = __importDefault(require("../models/user"));
 const auth_1 = require("../utils/auth");
 //create an account and token
@@ -144,3 +144,8 @@ function deleteUser(req, res) {
     });
 }
 exports.deleteUser = deleteUser;
+//get all chatrooms for a single user
+function getUserChats(req, res) {
+    return __awaiter(this, void 0, void 0, function* () { });
+}
+exports.getUserChats = getUserChats;

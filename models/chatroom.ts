@@ -1,7 +1,7 @@
 import { Schema, model, Types, ObjectId } from 'mongoose';
 
 
-export interface IChatroom {
+export interface IChatroom extends Document {
    _id: ObjectId;
    roomName: string;
    members: ObjectId[];
@@ -10,7 +10,7 @@ export interface IChatroom {
    isGroup: () => boolean;
 
 }
-export interface INewChatroom {
+export interface INewChatroom extends Document {
    roomName?: string;
    members?: ObjectId[];
    lastMessage?: ObjectId;

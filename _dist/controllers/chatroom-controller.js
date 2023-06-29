@@ -9,32 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteChat = exports.removeMemberFromChat = exports.addMemberToChat = exports.leaveChat = exports.joinChat = exports.createChat = exports.getUserChats = exports.getSingleChat = void 0;
+exports.deleteChat = exports.removeMemberFromChat = exports.addMemberToChat = exports.createChat = exports.getSingleChat = void 0;
 // get single room
 function getSingleChat(req, res) {
     return __awaiter(this, void 0, void 0, function* () { });
 }
 exports.getSingleChat = getSingleChat;
-//get all chatrooms for a single user
-function getUserChats(req, res) {
-    return __awaiter(this, void 0, void 0, function* () { });
-}
-exports.getUserChats = getUserChats;
 //create new room
 function createChat(req, res) {
-    return __awaiter(this, void 0, void 0, function* () { });
+    return __awaiter(this, void 0, void 0, function* () {
+        // should be a fallback for getSingleChat
+    });
 }
 exports.createChat = createChat;
-//join a Chat
-function joinChat(req, res) {
-    return __awaiter(this, void 0, void 0, function* () { });
-}
-exports.joinChat = joinChat;
-//leave a Chat
-function leaveChat(req, res) {
-    return __awaiter(this, void 0, void 0, function* () { });
-}
-exports.leaveChat = leaveChat;
 //add members
 function addMemberToChat(req, res) {
     return __awaiter(this, void 0, void 0, function* () { });
