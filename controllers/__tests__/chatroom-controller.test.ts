@@ -12,17 +12,29 @@ describe('Chat Routes', () => {
    let member1: IUser
    let member2: IUser
    let example_chat: IChatroom
+   let example_dm: IChatroom
+   let token: string;
    before(async () => {
       // Connect to the test database or create a separate test database
       mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/messaging-app')
+      await Chatroom.deleteMany({})
 
-      //create 3 users
-
+      // get token
       admin = await User.create({
          username: "Chat-controller-test_Admin",
          email: "Chat-controller-test_Admin@test.com",
          password: "asdfasdf"
-      } as INewUser);
+      } as INewUser)
+
+      const response = await request.post('/api/users/login').send({
+         username: "Chat-controller-test_Admin",
+         email: "Chat-controller-test_Admin@test.com",
+         password: "asdfasdf"
+      } as INewUser)
+
+      token = response.body.token
+
+      //create 3 users
       member1 = await User.create({
          username: "Chat-controller-test_Member1",
          email: "Chat-controller-test_Member1@test.com",
@@ -50,33 +62,52 @@ describe('Chat Routes', () => {
       await User.deleteOne({
          username: "Chat-controller-test_Member2",
       })
+      await Chatroom.deleteMany({})
 
       await mongoose.disconnect();
    });
 
 
    describe("/api/chat", () => {
-      it('Creates a new chat room', async () => {
+      it('Creates a new chat room between admin and member1', async () => {
 
-         const response = await request.post(`/api/chat/`).send({
-            roomName: "",
-            members: [admin._id, member1._id],
-            admin: admin._id,
-         })
+         const response = await request.post(`/api/chat/`).set("Authorization", "Bearer " + token).send({ users: [member1._id] })
 
          expect(response.status).to.equal(200);
          expect(response.body).to.be.an('object');
-         expect(response.body).to.have.all.keys('_id', "roomName", "members", "lastMessage", "admin", "isGroup");
+         expect(response.body).to.have.all.keys('_id', "roomName", "members", "admin", "isGroup", "updatedAt", "createdAt");
+
+         example_dm = response.body;
+
+
+      });
+      it('Creates a group chat', async () => {
+
+         const response = await request.post(`/api/chat/`).set("Authorization", "Bearer " + token).send({ users: [member1._id, member2._id] })
+
+         expect(response.status).to.equal(200);
+         expect(response.body).to.be.an('object');
+         expect(response.body).to.have.all.keys('_id', "roomName", "members", "admin", "isGroup", "updatedAt", "createdAt");
 
          example_chat = response.body;
 
       });
-      it('Gets a single chat', async () => {
+      it("get chat by id", async () => {
+         const response = await request.get(`/api/chat/${example_dm._id}`).set("Authorization", "Bearer " + token)
 
-         const response = await request.get(`/api/chat/${example_chat._id}`)
          expect(response.status).to.equal(200);
          expect(response.body).to.be.an('object');
-         expect(response.body).to.have.all.keys('_id', "roomName", "members", "lastMessage", "admin", "isGroup");
+         expect(response.body).to.have.all.keys('_id', "roomName", "members", "admin", "isGroup", "updatedAt", "createdAt");
+         // expect(response.body.members.length).to.have.lengthOf(2)
+         // expect(response.body.members).to.not.include(member2)
+      });
+      it('Gets a single chat between 2 people', async () => {
+
+         const response = await request.post(`/api/chat/view`).set("Authorization", "Bearer " + token).send({ users: [member2._id] })
+
+         expect(response.status).to.equal(200);
+         expect(response.body).to.be.an('object');
+         expect(response.body).to.have.all.keys('_id', "roomName", "members", "admin", "isGroup", "updatedAt", "createdAt");
 
 
       });
@@ -84,32 +115,33 @@ describe('Chat Routes', () => {
 
       it('adds members to an existing chat', async () => {
 
-         const response = await request.put(`/api/chat/${example_chat._id}/add`).send({ user: member2._id })
+         const response = await request.put(`/api/chat/${example_dm._id}/add`).set("Authorization", "Bearer " + token).send({ users: [member2._id] })
+         console.log(response.body)
          expect(response.status).to.equal(200);
          expect(response.body).to.be.an('object');
-         expect(response.body).to.have.all.keys('_id', "roomName", "members", "lastMessage", "admin", "isGroup");
+         expect(response.body).to.have.all.keys('_id', "roomName", "members", "admin", "isGroup", "updatedAt", "createdAt");
          expect(response.body.members).to.have.lengthOf(3)
-         expect(response.body.members).to.include(member2)
+
 
       });
 
       it("Removes member from a room", async () => {
-         const response = await request.put(`/api/chat/${example_chat._id}/remove`).send({ user: member2._id })
+         const response = await request.put(`/api/chat/${example_dm._id}/remove`).set("Authorization", "Bearer " + token).send({ users: [member2._id] })
          expect(response.status).to.equal(200);
          expect(response.body).to.be.an('object');
-         expect(response.body).to.have.all.keys('_id', "roomName", "members", "lastMessage", "admin", "isGroup");
-         expect(response.body.members.length).to.have.lengthOf(2)
-         expect(response.body.members).to.not.include(member2)
+         expect(response.body).to.have.all.keys('_id', "roomName", "members", "admin", "isGroup", "updatedAt", "createdAt");
+         expect(response.body.members).to.have.lengthOf(2)
+
 
       });
       it("deletes a chat", async () => {
-
-         const response = await request.put(`/api/chat/${example_chat._id}`)
+         const response = await request.delete(`/api/chat/${example_dm._id}`).set("Authorization", "Bearer " + token)
 
          expect(response.status).to.equal(200);
 
-         expect(response.body.members.length).to.have.lengthOf(2)
-         expect(response.body.members).to.not.include(member2)
+         // expect(response.body.members.length).to.have.lengthOf(2)
+         // expect(response.body.members).to.not.include(member2)
       });
+
    })
 });

@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUserChats = exports.deleteUser = exports.updatePassword = exports.updateUser = exports.getMe = exports.getUsers = exports.login = exports.register = void 0;
 const user_1 = __importDefault(require("../models/user"));
+const chatroom_1 = __importDefault(require("../models/chatroom"));
 const auth_1 = require("../utils/auth");
 //create an account and token
 function register(req, res) {
@@ -146,6 +147,19 @@ function deleteUser(req, res) {
 exports.deleteUser = deleteUser;
 //get all chatrooms for a single user
 function getUserChats(req, res) {
-    return __awaiter(this, void 0, void 0, function* () { });
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const chats = yield chatroom_1.default.find({ members: { $elemMatch: { $eq: req.user._id } } })
+                .populate("users", "-password")
+                .populate("admin", "-password")
+                .populate("lastMessage")
+                .sort({ updatedAt: -1 });
+            res.json(chats);
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json(error);
+        }
+    });
 }
 exports.getUserChats = getUserChats;

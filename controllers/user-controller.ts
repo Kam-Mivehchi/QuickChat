@@ -1,4 +1,5 @@
 import User, { IUser } from '../models/user';
+import Chatroom, { IChatroom } from '../models/chatroom';
 import { Request, Response } from 'express';
 import { generateToken, UserPayload } from '../utils/auth';
 
@@ -143,7 +144,20 @@ export async function deleteUser(req: Request, res: Response) {
 
 }
 //get all chatrooms for a single user
-export async function getUserChats(req: Request, res: Response) { }
+export async function getUserChats(req: Request, res: Response) {
+
+   try {
+      const chats = await Chatroom.find({ members: { $elemMatch: { $eq: req.user!._id } } })
+         .populate("users", "-password")
+         .populate("admin", "-password")
+         .populate("lastMessage")
+         .sort({ updatedAt: -1 });
+      res.json(chats)
+   } catch (error) {
+      console.error(error);
+      res.status(500).json(error);
+   }
+}
 
 
 

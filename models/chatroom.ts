@@ -10,7 +10,7 @@ export interface IChatroom extends Document {
    isGroup: () => boolean;
 
 }
-export interface INewChatroom extends Document {
+export interface INewChatroom {
    roomName?: string;
    members?: ObjectId[];
    lastMessage?: ObjectId;
