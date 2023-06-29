@@ -10,10 +10,12 @@ const router = Router();
 router.route('/register').post(register)
 router.route('/login').post(login);
 
-router.route('/').get(getUsers)
+router.route('/').get(authMiddleware, getUsers)
+router.route('/chats').get(authMiddleware, getUserChats)
+
 router.route('/:id').get(authMiddleware, getMe).put(authMiddleware, updateUser).delete(authMiddleware, deleteUser)
-router.route('/:id/chats').put(authMiddleware, getUserChats)
 router.route('/:id/recovery').put(authMiddleware, updatePassword)
+
 
 
 

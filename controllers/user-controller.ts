@@ -145,14 +145,18 @@ export async function deleteUser(req: Request, res: Response) {
 }
 //get all chatrooms for a single user
 export async function getUserChats(req: Request, res: Response) {
-
+   // console.log("__________", req.user!._id)
    try {
-      const chats = await Chatroom.find({ members: { $elemMatch: { $eq: req.user!._id } } })
-         .populate("users", "-password")
+      console.log(req.body)
+      const allChats = await Chatroom.find({ members: { $elemMatch: { $eq: req.user!._id } } })
+         .populate("members", "-password")
          .populate("admin", "-password")
          .populate("lastMessage")
          .sort({ updatedAt: -1 });
-      res.json(chats)
+      console.log("_________", allChats)
+
+      res.json(allChats)
+
    } catch (error) {
       console.error(error);
       res.status(500).json(error);

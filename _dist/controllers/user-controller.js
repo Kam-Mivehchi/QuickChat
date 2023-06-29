@@ -148,13 +148,16 @@ exports.deleteUser = deleteUser;
 //get all chatrooms for a single user
 function getUserChats(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        // console.log("__________", req.user!._id)
         try {
-            const chats = yield chatroom_1.default.find({ members: { $elemMatch: { $eq: req.user._id } } })
-                .populate("users", "-password")
+            console.log(req.body);
+            const allChats = yield chatroom_1.default.find({ members: { $elemMatch: { $eq: req.user._id } } })
+                .populate("members", "-password")
                 .populate("admin", "-password")
                 .populate("lastMessage")
                 .sort({ updatedAt: -1 });
-            res.json(chats);
+            console.log("_________", allChats);
+            res.json(allChats);
         }
         catch (error) {
             console.error(error);

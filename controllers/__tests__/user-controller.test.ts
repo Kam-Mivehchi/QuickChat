@@ -1,21 +1,32 @@
 import chai, { expect } from 'chai';
 import User, { INewUser, IUser } from '../../models/user'
+import Chatroom, { IChatroom } from '../../models/chatroom'
 import chaiHttp from 'chai-http';
-import mongoose from 'mongoose';
+import mongoose, { ObjectId } from 'mongoose';
 chai.use(chaiHttp);
 const request = chai.request("http://localhost:3001");
 
 
 describe('User Routes', () => {
-   before(() => {
+
+   let token: string;
+   let userId: ObjectId;
+   let member1: IUser;
+   before(async () => {
       // Connect to the test database or create a separate test database
       mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/messaging-app')
+      member1 = await User.create({
+         username: "User-controller-test_Member1",
+         email: "User-controller-test_Member1@test.com",
+         password: "asdfasdf"
+      } as INewUser)
+      console.log(member1)
    });
-
    after(async () => {
       // Disconnect from the test database
       await User.deleteOne({ username: "controller-test-user" })
       await User.deleteOne({ username: "updated-controller-test-user" })
+      await User.deleteOne({ username: "User-controller-test_Member1" })
 
       await mongoose.disconnect();
    });
@@ -55,11 +66,13 @@ describe('User Routes', () => {
          expect(response.body).to.be.an('object');
          expect(response.body).to.have.all.keys('token', 'user');
          expect(response.body.user).to.have.all.keys('_id', "username", "email", "password", "bio", "avatar");
-         // expect(response.body).to.have.lengthOf.at.least(1);
+
+         token = response.body.token
+         userId = response.body.user._id
       });
       it('getUsers', async () => {
          const response = await request
-            .get('/api/users')
+            .get('/api/users').set("Authorization", "Bearer " + token)
          // allUsers.res.should.have.lengthOf.at.least(1);
          expect(response.status).to.equal(200);
 
@@ -69,7 +82,7 @@ describe('User Routes', () => {
 
       it("getMe", async () => {
 
-         const response = await request.get(`/api/users/${test_user._id}`)
+         const response = await request.get(`/api/users/${test_user._id}`).set("Authorization", "Bearer " + token)
          // allUsers.res.should.have.lengthOf.at.least(1);
          expect(response.status).to.equal(200);
 
@@ -80,13 +93,23 @@ describe('User Routes', () => {
          expect(response.body).to.have.all.keys('_id', "username", "email", "password", "bio", "avatar");
          // expect(response.body).to.have.lengthOf.at.least(1);
       });
+      it("get all chats for single User", async () => {
+
+         const response = await request.get(`/api/users/chats`).set("Authorization", "Bearer " + token)
+         console.log(response.body)
+         expect(response.status).to.equal(200);
+         expect(response.body).to.be.an('array');
+         // expect(response.body[0]).to.have.all.keys('_id', "roomName", "members", "lastMessage", "admin", "isGroup");
+
+         //add code to make sure the user is in each chat
+
+      });
 
       it("update username", async () => {
 
-         const response = await request.put(`/api/users/${test_user._id}`).send({ username: "updated-controller-test-user" })
+         const response = await request.put(`/api/users/${test_user._id}`).set("Authorization", "Bearer " + token).send({ username: "updated-controller-test-user" })
          // allUsers.res.should.have.lengthOf.at.least(1);
          expect(response.status).to.equal(200);
-
 
          expect(response.body).to.be.an('object');
 
@@ -97,7 +120,7 @@ describe('User Routes', () => {
       });
       it("update bio", async () => {
 
-         const response = await request.put(`/api/users/${test_user._id}`).send({ bio: "updated bio" })
+         const response = await request.put(`/api/users/${test_user._id}`).set("Authorization", "Bearer " + token).send({ bio: "updated bio" })
          // allUsers.res.should.have.lengthOf.at.least(1);
          expect(response.status).to.equal(200);
 
@@ -111,7 +134,7 @@ describe('User Routes', () => {
       });
       it("update avatar", async () => {
 
-         const response = await request.put(`/api/users/${test_user._id}`).send({ avatar: "update" })
+         const response = await request.put(`/api/users/${test_user._id}`).set("Authorization", "Bearer " + token).send({ avatar: "update" })
          // allUsers.res.should.have.lengthOf.at.least(1);
          expect(response.status).to.equal(200);
 
@@ -126,7 +149,7 @@ describe('User Routes', () => {
 
       it("update password", async () => {
 
-         const response = await request.put(`/api/users/${test_user._id}/recovery`).send({ password: "newpassword" })
+         const response = await request.put(`/api/users/${test_user._id}/recovery`).set("Authorization", "Bearer " + token).send({ password: "newpassword" })
          // allUsers.res.should.have.lengthOf.at.least(1);
          expect(response.status).to.equal(200);
 
@@ -148,23 +171,14 @@ describe('User Routes', () => {
 
       });
 
+
       it('delete a user', async () => {
-         const response = await request.delete(`/api/users/${test_user._id}`)
+         const response = await request.delete(`/api/users/${test_user._id}`).set("Authorization", "Bearer " + token)
          expect(response.status).to.equal(200);
 
 
 
       })
-      it("get all chats for single User", async () => {
-         const response = await request.get(`/api/users/${test_user._id}/chats`)
-
-         expect(response.status).to.equal(200);
-         expect(response.body).to.be.an('array');
-         expect(response.body[0]).to.have.all.keys('_id', "roomName", "members", "lastMessage", "admin", "isGroup");
-
-         //add code to make sure the user is in each chat
-
-      });
 
    })
 });

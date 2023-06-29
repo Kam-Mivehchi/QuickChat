@@ -6,11 +6,11 @@ import { Request, Response } from 'express';
 export async function getSingleChat(req: Request, res: Response) {
    try {
 
-      const { users } = req.body;
+      const { members } = req.body;
       // const { chatId } = req.params;
-      console.log(users)
+      console.log(members)
 
-      if (!users.length) {
+      if (!members.length) {
          return res.send("No User Provided!");
       }
 
@@ -18,7 +18,7 @@ export async function getSingleChat(req: Request, res: Response) {
 
          $and: [
             { members: { $elemMatch: { $eq: req.user!._id } } },
-            { members: { $elemMatch: { $eq: users } } },
+            { members: { $elemMatch: { $eq: members } } },
          ],
       })
          .populate("members", "-password")
@@ -46,13 +46,13 @@ export async function createChat(req: Request, res: Response) {
    try {
 
 
-      //users should be entered as an array of ids
-      const { users } = req.body;
+      //members should be entered as an array of ids
+      const { members } = req.body;
 
       // should be a fallback for getSingleChat
       const createChat = await Chatroom.create({
          chatName: "Direct Message",
-         members: [req.user!._id, ...users],
+         members: [req.user!._id, ...members],
          admin: req.user!._id
       });
       const fullChat = await Chatroom.findOne({ _id: createChat._id }).populate(
@@ -72,14 +72,14 @@ export async function createChat(req: Request, res: Response) {
 //add members
 export async function addMemberToChat(req: Request, res: Response) {
    try {
-      //users should be entered as an array of ids
-      const { users } = req.body;
+      //members should be entered as an array of ids
+      const { members } = req.body;
       const { chatId } = req.params;
 
       const addUser = await Chatroom.findByIdAndUpdate(
          chatId,
          {
-            $addToSet: { members: { $each: users } },
+            $addToSet: { members: { $each: members } },
          },
          {
             new: true,
@@ -99,15 +99,15 @@ export async function addMemberToChat(req: Request, res: Response) {
 //remove members
 export async function removeMemberFromChat(req: Request, res: Response) {
    try {
-      //users should be entered as an array of ids
+      //members should be entered as an array of ids
 
-      const { users } = req.body;
+      const { members } = req.body;
       const { chatId } = req.params;
 
       const addUser = await Chatroom.findByIdAndUpdate(
          chatId,
          {
-            $pullAll: { members: users },
+            $pullAll: { members: members },
          },
          {
             new: true,
@@ -131,7 +131,7 @@ export async function deleteChat(req: Request, res: Response) {
 
 
       if (req.user!._id.toString() !== toDelete?.admin.toString()) {
-         return res.status(401).json({ message: 'Only the admin can delete this chat' });
+         return res.status(402).json({ message: 'Only the admin can delete this chat' });
       }
 
       await Chatroom.findOneAndDelete({ _id: req.params.chatId })

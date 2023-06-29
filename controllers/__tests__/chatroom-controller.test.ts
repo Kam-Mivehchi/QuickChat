@@ -71,7 +71,7 @@ describe('Chat Routes', () => {
    describe("/api/chat", () => {
       it('Creates a new chat room between admin and member1', async () => {
 
-         const response = await request.post(`/api/chat/`).set("Authorization", "Bearer " + token).send({ users: [member1._id] })
+         const response = await request.post(`/api/chat/`).set("Authorization", "Bearer " + token).send({ members: [member1._id] })
 
          expect(response.status).to.equal(200);
          expect(response.body).to.be.an('object');
@@ -83,7 +83,7 @@ describe('Chat Routes', () => {
       });
       it('Creates a group chat', async () => {
 
-         const response = await request.post(`/api/chat/`).set("Authorization", "Bearer " + token).send({ users: [member1._id, member2._id] })
+         const response = await request.post(`/api/chat/`).set("Authorization", "Bearer " + token).send({ members: [member1._id, member2._id] })
 
          expect(response.status).to.equal(200);
          expect(response.body).to.be.an('object');
@@ -103,7 +103,7 @@ describe('Chat Routes', () => {
       });
       it('Gets a single chat between 2 people', async () => {
 
-         const response = await request.post(`/api/chat/view`).set("Authorization", "Bearer " + token).send({ users: [member2._id] })
+         const response = await request.post(`/api/chat/view`).set("Authorization", "Bearer " + token).send({ members: [member2._id] })
 
          expect(response.status).to.equal(200);
          expect(response.body).to.be.an('object');
@@ -115,8 +115,8 @@ describe('Chat Routes', () => {
 
       it('adds members to an existing chat', async () => {
 
-         const response = await request.put(`/api/chat/${example_dm._id}/add`).set("Authorization", "Bearer " + token).send({ users: [member2._id] })
-         console.log(response.body)
+         const response = await request.put(`/api/chat/${example_dm._id}/add`).set("Authorization", "Bearer " + token).send({ members: [member2._id] })
+
          expect(response.status).to.equal(200);
          expect(response.body).to.be.an('object');
          expect(response.body).to.have.all.keys('_id', "roomName", "members", "admin", "isGroup", "updatedAt", "createdAt");
@@ -126,7 +126,7 @@ describe('Chat Routes', () => {
       });
 
       it("Removes member from a room", async () => {
-         const response = await request.put(`/api/chat/${example_dm._id}/remove`).set("Authorization", "Bearer " + token).send({ users: [member2._id] })
+         const response = await request.put(`/api/chat/${example_dm._id}/remove`).set("Authorization", "Bearer " + token).send({ members: [member2._id] })
          expect(response.status).to.equal(200);
          expect(response.body).to.be.an('object');
          expect(response.body).to.have.all.keys('_id', "roomName", "members", "admin", "isGroup", "updatedAt", "createdAt");
@@ -139,8 +139,6 @@ describe('Chat Routes', () => {
 
          expect(response.status).to.equal(200);
 
-         // expect(response.body.members.length).to.have.lengthOf(2)
-         // expect(response.body.members).to.not.include(member2)
       });
 
    })
