@@ -1,7 +1,7 @@
 import User, { IUser } from '../models/user';
 import { Request, Response } from 'express';
-import { generateToken } from '../utils/auth';
-import { UserPayload } from '../utils/auth'
+import { generateToken, UserPayload } from '../utils/auth';
+
 
 
 //create an account and token
@@ -79,7 +79,11 @@ export async function getMe(req: Request, res: Response) {
 
 // update a user not their password
 export async function updateUser(req: Request, res: Response) {
+   //do not allow psw change on this route
+   if (req.body.hasOwnProperty('password')) {
+      return res.status(404).json({ message: 'Cannot updated password with this route, Use /api/users/:id/recovery' });
 
+   }
    try {
       const updatedUser: IUser | null = await User.findOneAndUpdate(
          { _id: req.params.id },
@@ -106,7 +110,7 @@ export async function updateUser(req: Request, res: Response) {
 export async function updatePassword(req: Request, res: Response) {
 
    try {
-      const user: IUser | null = await User.findById(req.params.id).select('-__v');
+      const user: IUser | null = await User.findOne({ _id: req.params.id }).select('-__v');
 
 
       if (!user) {
@@ -115,7 +119,8 @@ export async function updatePassword(req: Request, res: Response) {
 
       user.password = req.body.password;
       await user.save();
-      res.json("success");
+      const { _id, username, email, bio, avatar } = user;
+      res.json({ _id, username, email, bio, avatar });
 
    } catch (error) {
       console.error(error);

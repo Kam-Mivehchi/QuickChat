@@ -22,7 +22,7 @@ const chatroomSchema = new Schema<IChatroom>(
    {
       roomName: {
          type: String,
-         default: "New Chat",
+         default: "Direct Message",
          trim: true,
       },
       members: [

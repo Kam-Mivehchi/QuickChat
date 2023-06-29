@@ -88,6 +88,10 @@ exports.getMe = getMe;
 // update a user not their password
 function updateUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        //do not allow psw change on this route
+        if (req.body.hasOwnProperty('password')) {
+            return res.status(404).json({ message: 'Cannot updated password with this route, Use /api/users/:id/recovery' });
+        }
         try {
             const updatedUser = yield user_1.default.findOneAndUpdate({ _id: req.params.id }, {
                 $set: req.body,
@@ -110,13 +114,14 @@ exports.updateUser = updateUser;
 function updatePassword(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const user = yield user_1.default.findById(req.params.id).select('-__v');
+            const user = yield user_1.default.findOne({ _id: req.params.id }).select('-__v');
             if (!user) {
                 return res.status(404).json({ message: 'No user with this id!' });
             }
             user.password = req.body.password;
             yield user.save();
-            res.json("success");
+            const { _id, username, email, bio, avatar } = user;
+            res.json({ _id, username, email, bio, avatar });
         }
         catch (error) {
             console.error(error);

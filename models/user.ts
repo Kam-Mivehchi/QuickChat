@@ -11,7 +11,7 @@ export interface IUser extends Document {
    password: string;
    avatar?: string;
    bio?: string;
-   isCorrectPassword: (password: string) => boolean;
+   isCorrectPassword(password: string): boolean;
 }
 export interface INewUser {
    _id?: ObjectId;
@@ -65,6 +65,7 @@ const userSchema = new Schema<IUser>(
 
 // hash user password
 userSchema.pre('save', async function (next) {
+
    if (this.isNew || this.isModified('password')) {
       const saltRounds: number = 10;
       this.password = await bcrypt.hash(this.password, saltRounds);
@@ -80,4 +81,4 @@ userSchema.methods.isCorrectPassword = async function (password: string) {
 
 
 
-export default model('User', userSchema);
+export default model<IUser>('User', userSchema);

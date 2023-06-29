@@ -4,7 +4,7 @@ const mongoose_1 = require("mongoose");
 const chatroomSchema = new mongoose_1.Schema({
     roomName: {
         type: String,
-        default: "New Chat",
+        default: "Direct Message",
         trim: true,
     },
     members: [

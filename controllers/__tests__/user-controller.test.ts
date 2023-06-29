@@ -6,7 +6,7 @@ chai.use(chaiHttp);
 const request = chai.request("http://localhost:3001");
 
 
-describe('UserController', () => {
+describe('User Routes', () => {
    before(() => {
       // Connect to the test database or create a separate test database
       mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/messaging-app')
@@ -123,6 +123,7 @@ describe('UserController', () => {
          expect(response.body.avatar).to.equal("update");
          // expect(response.body).to.have.lengthOf.at.least(1);
       });
+
       it("update password", async () => {
 
          const response = await request.put(`/api/users/${test_user._id}/recovery`).send({ password: "newpassword" })
@@ -133,7 +134,7 @@ describe('UserController', () => {
          expect(response.body).to.be.an('object');
 
          // expect(response.body).to.have.all.keys('token', 'user');
-         expect(response.body).to.have.all.keys('_id', "username", "email", "password", "bio", "avatar");
+         expect(response.body).to.have.all.keys('_id', "username", "email", "bio", "avatar");
 
          const checkPSW = await request.post('/api/users/login').send({
             email: "controller-test-user@email.com",
@@ -147,7 +148,13 @@ describe('UserController', () => {
 
       });
 
+      it('delete a user', async () => {
+         const response = await request.delete(`/api/users/${test_user._id}`)
+         expect(response.status).to.equal(200);
 
+
+
+      })
 
    })
 });
