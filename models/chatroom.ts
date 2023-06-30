@@ -1,16 +1,22 @@
 import { Schema, model, Types, ObjectId } from 'mongoose';
-
+import { IUser, IMessage } from '../models'
 
 export interface IChatroom extends Document {
    _id: ObjectId;
    roomName: string;
-   members: ObjectId[];
-   lastMessage: ObjectId;
-   admin: ObjectId;
+   members: (ObjectId | IUser)[];
+   lastMessage: ObjectId | IMessage;
+   admin: ObjectId | IUser;
    isGroup: () => boolean;
 
 }
+export interface INewChatroom {
+   roomName?: string;
+   members?: ObjectId[];
+   lastMessage?: ObjectId;
+   admin?: ObjectId;
 
+}
 
 const chatroomSchema = new Schema<IChatroom>(
    {

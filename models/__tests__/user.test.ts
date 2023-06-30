@@ -1,7 +1,7 @@
 import "mocha"
 import chai from 'chai';
 import mongoose from 'mongoose';
-import User, { IUser, INewUser } from '../user'
+import { User, INewUser } from '../'
 
 chai.should();
 describe('User Model', () => { // the tests container

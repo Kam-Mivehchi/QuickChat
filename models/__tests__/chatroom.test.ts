@@ -1,8 +1,8 @@
 import "mocha"
-import chai, { expect } from 'chai';
+import chai from 'chai';
 import mongoose from 'mongoose';
-import User, { IUser, INewUser } from '../user'
-import Chatroom, { IChatroom, INewChatroom } from '../chatroom'
+import { User, IUser, INewUser, Chatroom, INewChatroom } from '../'
+
 
 chai.should();
 describe('Chatroom Model', async () => { // the tests container
