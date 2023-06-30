@@ -6,15 +6,15 @@ import { authMiddleware } from "../../utils/auth";
 
 const router = Router();
 
+router.route('/').get(authMiddleware, getUsers)
 //every route should be protected
 router.route('/register').post(register)
 router.route('/login').post(login);
 
-router.route('/').get(authMiddleware, getUsers)
 router.route('/chats').get(authMiddleware, getUserChats)
 
-router.route('/:id').get(authMiddleware, getMe).put(authMiddleware, updateUser).delete(authMiddleware, deleteUser)
-router.route('/:id/recovery').put(authMiddleware, updatePassword)
+router.route('/:userId').get(authMiddleware, getMe).put(authMiddleware, updateUser).delete(authMiddleware, deleteUser)
+router.route('/:userId/recovery').put(authMiddleware, updatePassword)
 
 
 

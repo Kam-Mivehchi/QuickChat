@@ -1,13 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const message_controller_1 = require("../../controllers/message-controller");
 const chatroom_controller_1 = require("../../controllers/chatroom-controller");
 const router = (0, express_1.Router)();
 //creates a new chat
 router.route('/').post(chatroom_controller_1.createChat);
 router.route('/view').post(chatroom_controller_1.getSingleChat);
 //gets chat data or deletes the room entirely as admin
-router.route('/:chatId').get(chatroom_controller_1.getChatById).delete(chatroom_controller_1.deleteChat);
+router.route('/:chatId').get(chatroom_controller_1.getChatById).delete(chatroom_controller_1.deleteChat).post(message_controller_1.sendMessage);
+router.route('/:chatId/messages').get(message_controller_1.allMessages);
+//future
+// router.route('/:chatId/members').put(editChatMembers)
 //adds members to a chatroom
 router.route('/:chatId/add').put(chatroom_controller_1.addMemberToChat);
 // handles leaving the chat and removing people as admin

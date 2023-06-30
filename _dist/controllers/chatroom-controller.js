@@ -14,13 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getChatById = exports.deleteChat = exports.removeMemberFromChat = exports.addMemberToChat = exports.createChat = exports.getSingleChat = void 0;
 const chatroom_1 = __importDefault(require("../models/chatroom"));
-// get single room
+// get single room only for dm
 function getSingleChat(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { members } = req.body;
             // const { chatId } = req.params;
-            console.log(members);
             if (!members.length) {
                 return res.send("No User Provided!");
             }
@@ -32,7 +31,6 @@ function getSingleChat(req, res) {
             })
                 .populate("members", "-password")
                 .populate("lastMessage");
-            console.log(chat);
             if (!chat.length) {
                 return createChat(req, res);
             }
@@ -45,7 +43,7 @@ function getSingleChat(req, res) {
     });
 }
 exports.getSingleChat = getSingleChat;
-//create new room
+//create new group chat
 function createChat(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

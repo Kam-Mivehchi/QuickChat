@@ -20,7 +20,7 @@ describe('User Routes', () => {
          email: "User-controller-test_Member1@test.com",
          password: "asdfasdf"
       } as INewUser)
-      console.log(member1)
+
    });
    after(async () => {
       // Disconnect from the test database
@@ -96,7 +96,7 @@ describe('User Routes', () => {
       it("get all chats for single User", async () => {
 
          const response = await request.get(`/api/users/chats`).set("Authorization", "Bearer " + token)
-         console.log(response.body)
+
          expect(response.status).to.equal(200);
          expect(response.body).to.be.an('array');
          // expect(response.body[0]).to.have.all.keys('_id', "roomName", "members", "lastMessage", "admin", "isGroup");

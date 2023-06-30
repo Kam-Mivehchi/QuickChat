@@ -17,7 +17,7 @@ describe('Chat Routes', () => {
    before(async () => {
       // Connect to the test database or create a separate test database
       mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/messaging-app')
-      await Chatroom.deleteMany({})
+      // await Chatroom.deleteMany({})
 
       // get token
       admin = await User.create({
@@ -62,7 +62,7 @@ describe('Chat Routes', () => {
       await User.deleteOne({
          username: "Chat-controller-test_Member2",
       })
-      await Chatroom.deleteMany({})
+      // await Chatroom.deleteMany({})
 
       await mongoose.disconnect();
    });

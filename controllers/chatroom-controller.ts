@@ -2,13 +2,13 @@ import User, { IUser } from '../models/user';
 import Chatroom, { IChatroom } from '../models/chatroom';
 import { Request, Response } from 'express';
 
-// get single room
+// get single room only for dm
 export async function getSingleChat(req: Request, res: Response) {
    try {
 
       const { members } = req.body;
       // const { chatId } = req.params;
-      console.log(members)
+
 
       if (!members.length) {
          return res.send("No User Provided!");
@@ -23,7 +23,7 @@ export async function getSingleChat(req: Request, res: Response) {
       })
          .populate("members", "-password")
          .populate("lastMessage");
-      console.log(chat)
+
 
       if (!chat.length) {
          return createChat(req, res)
@@ -41,7 +41,7 @@ export async function getSingleChat(req: Request, res: Response) {
 
 
 
-//create new room
+//create new group chat
 export async function createChat(req: Request, res: Response) {
    try {
 

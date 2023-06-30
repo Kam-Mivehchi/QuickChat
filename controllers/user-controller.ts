@@ -62,7 +62,7 @@ export async function getUsers(_req: Request, res: Response) {
 // get single user by id
 export async function getMe(req: Request, res: Response) {
    try {
-      const user: IUser | null = await User.findOne({ _id: req.params.id })
+      const user: IUser | null = await User.findOne({ _id: req.params.userId })
          .select('-__v')
 
       if (!user) {
@@ -87,7 +87,7 @@ export async function updateUser(req: Request, res: Response) {
    }
    try {
       const updatedUser: IUser | null = await User.findOneAndUpdate(
-         { _id: req.params.id },
+         { _id: req.params.userId },
          {
             $set: req.body,
          },
@@ -111,7 +111,7 @@ export async function updateUser(req: Request, res: Response) {
 export async function updatePassword(req: Request, res: Response) {
 
    try {
-      const user: IUser | null = await User.findOne({ _id: req.params.id }).select('-__v');
+      const user: IUser | null = await User.findOne({ _id: req.params.userId }).select('-__v');
 
 
       if (!user) {
@@ -134,7 +134,7 @@ export async function updatePassword(req: Request, res: Response) {
 export async function deleteUser(req: Request, res: Response) {
 
    try {
-      await User.findOneAndDelete({ _id: req.params.id })
+      await User.findOneAndDelete({ _id: req.params.userId })
       res.json({ message: 'User and associated thoughts deleted!' });
 
    } catch (error) {
@@ -145,15 +145,15 @@ export async function deleteUser(req: Request, res: Response) {
 }
 //get all chatrooms for a single user
 export async function getUserChats(req: Request, res: Response) {
-   // console.log("__________", req.user!._id)
+   //
    try {
-      console.log(req.body)
+
       const allChats = await Chatroom.find({ members: { $elemMatch: { $eq: req.user!._id } } })
          .populate("members", "-password")
          .populate("admin", "-password")
          .populate("lastMessage")
          .sort({ updatedAt: -1 });
-      console.log("_________", allChats)
+
 
       res.json(allChats)
 

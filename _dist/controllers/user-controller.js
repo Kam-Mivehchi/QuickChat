@@ -72,7 +72,7 @@ exports.getUsers = getUsers;
 function getMe(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const user = yield user_1.default.findOne({ _id: req.params.id })
+            const user = yield user_1.default.findOne({ _id: req.params.userId })
                 .select('-__v');
             if (!user) {
                 return res.status(400).json({ message: 'Cannot find a user with this id!' });
@@ -94,7 +94,7 @@ function updateUser(req, res) {
             return res.status(404).json({ message: 'Cannot updated password with this route, Use /api/users/:id/recovery' });
         }
         try {
-            const updatedUser = yield user_1.default.findOneAndUpdate({ _id: req.params.id }, {
+            const updatedUser = yield user_1.default.findOneAndUpdate({ _id: req.params.userId }, {
                 $set: req.body,
             }, {
                 runValidators: true,
@@ -115,7 +115,7 @@ exports.updateUser = updateUser;
 function updatePassword(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const user = yield user_1.default.findOne({ _id: req.params.id }).select('-__v');
+            const user = yield user_1.default.findOne({ _id: req.params.userId }).select('-__v');
             if (!user) {
                 return res.status(404).json({ message: 'No user with this id!' });
             }
@@ -135,7 +135,7 @@ exports.updatePassword = updatePassword;
 function deleteUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield user_1.default.findOneAndDelete({ _id: req.params.id });
+            yield user_1.default.findOneAndDelete({ _id: req.params.userId });
             res.json({ message: 'User and associated thoughts deleted!' });
         }
         catch (error) {
@@ -148,15 +148,13 @@ exports.deleteUser = deleteUser;
 //get all chatrooms for a single user
 function getUserChats(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        // console.log("__________", req.user!._id)
+        //
         try {
-            console.log(req.body);
             const allChats = yield chatroom_1.default.find({ members: { $elemMatch: { $eq: req.user._id } } })
                 .populate("members", "-password")
                 .populate("admin", "-password")
                 .populate("lastMessage")
                 .sort({ updatedAt: -1 });
-            console.log("_________", allChats);
             res.json(allChats);
         }
         catch (error) {
