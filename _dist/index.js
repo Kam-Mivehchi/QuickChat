@@ -26,7 +26,31 @@ const io = new socket_io_1.Server(httpServer, {
     },
 });
 io.on("connection", (socket) => {
-    // ...
+    //connected to correct id
+    socket.on("setup", (userData) => {
+        socket.join(userData._id);
+        socket.emit("connected");
+    });
+    socket.on("join-chat", (room) => {
+        socket.join(room);
+    });
+    socket.on("typing", (room) => socket.in(room).emit("typing"));
+    socket.on("stop-typing", (room) => socket.in(room).emit("stop-typing"));
+    socket.on("new-message", (newMessageReceived) => {
+        let chat = newMessageReceived.chatroom;
+        let members = chat.members;
+        let sender = newMessageReceived.sender;
+        if (!members.length)
+            return console.log(`chat.users not defined`);
+        members.forEach((user) => {
+            if (user._id === sender._id)
+                return;
+            socket.in(user._id).emit("message-received", newMessageReceived);
+        });
+    });
+    socket.off("setup", (userData) => {
+        socket.leave(userData._id);
+    });
 });
 connection_1.default.once('open', () => {
     try {

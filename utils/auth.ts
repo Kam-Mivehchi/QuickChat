@@ -1,11 +1,11 @@
 // const jwt = require('jsonwebtoken');
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express"
 import 'dotenv/config'
 // import { ObjectId } from 'bson';
 import { ObjectId } from 'mongoose';
 // set token secret and expiration date
-const secret = process.env.JWT_SECRET;
+const secret = process.env.JWT_SECRET as Secret;
 const expiration = '2h';
 
 
@@ -44,7 +44,7 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction):
 
   // verify token and get user data out of it
   try {
-    const data = jwt.verify(token, secret, { maxAge: expiration }) as UserPayload;
+    const data = jwt.verify(token, secret as Secret, { maxAge: expiration }) as unknown as UserPayload;
     req.user = data;
     next();
 

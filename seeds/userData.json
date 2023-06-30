@@ -1,0 +1,72 @@
+[
+   {
+      "username": "john_doe",
+      "email": "john@example.com",
+      "password": "asdfasdf",
+      "avatar": "https://robohash.org/john_doe",
+      "bio": "Hello, I'm John Doe!"
+   },
+   {
+      "username": "jane_smith",
+      "email": "jane@example.com",
+      "password": "asdfasdf",
+      "avatar": "https://robohash.org/jane_smith",
+      "bio": "Nice to meet you! I'm Jane Smith."
+   },
+   {
+      "username": "alex_wilson",
+      "email": "alex@example.com",
+      "password": "asdfasdf",
+      "avatar": "https://robohash.org/alex_wilson",
+      "bio": "Hey there! I'm Alex Wilson."
+   },
+   {
+      "username": "emma_jones",
+      "email": "emma@example.com",
+      "password": "asdfasdf",
+      "avatar": "https://robohash.org/emma_jones",
+      "bio": "Hi, I'm Emma Jones!"
+   },
+   {
+      "username": "michael_brown",
+      "email": "michael@example.com",
+      "password": "asdfasdf",
+      "avatar": "https://robohash.org/michael_brown",
+      "bio": "Greetings! I'm Michael Brown."
+   },
+   {
+      "username": "sarah_wilson",
+      "email": "sarah@example.com",
+      "password": "asdfasdf",
+      "avatar": "https://robohash.org/sarah_wilson",
+      "bio": "Hi there! I'm Sarah Wilson."
+   },
+   {
+      "username": "david_smith",
+      "email": "david@example.com",
+      "password": "asdfasdf",
+      "avatar": "https://robohash.org/david_smith",
+      "bio": "Hello, I'm David Smith!"
+   },
+   {
+      "username": "lisa_jackson",
+      "email": "lisa@example.com",
+      "password": "asdfasdf",
+      "avatar": "https://robohash.org/lisa_jackson",
+      "bio": "Nice to meet you! I'm Lisa Jackson."
+   },
+   {
+      "username": "matthew_davis",
+      "email": "matthew@example.com",
+      "password": "asdfasdf",
+      "avatar": "https://robohash.org/matthew_davis",
+      "bio": "Hey there! I'm Matthew Davis."
+   },
+   {
+      "username": "olivia_thompson",
+      "email": "olivia@example.com",
+      "password": "asdfasdf",
+      "avatar": "https://robohash.org/olivia_thompson",
+      "bio": "Hi, I'm Olivia Thompson!"
+   }
+]

@@ -34,6 +34,11 @@ const userSchema = new mongoose_1.Schema({
         minlength: 8,
         trim: true,
     },
+    bio: {
+        type: String,
+        default: "Share something about yourself",
+        trim: true,
+    },
     avatar: {
         type: String,
         default: "https://robohash.org/mail@ashallendesign.co.uk",
@@ -42,6 +47,7 @@ const userSchema = new mongoose_1.Schema({
     toJSON: {
         virtuals: true,
     },
+    id: false,
 });
 // hash user password
 userSchema.pre('save', function (next) {

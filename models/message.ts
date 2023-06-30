@@ -1,13 +1,15 @@
 import { Schema, model, Types, ObjectId } from 'mongoose';
+import { IChatroom, IUser } from '../models'
 
-export interface IMessage {
+export interface IMessage extends Document {
    _id: ObjectId;
-   chatroom: ObjectId;
+   chatroom: ObjectId | IChatroom;
    content: string;
-
+   sender: ObjectId | IUser;
 }
 
-const messageSchema = new Schema(
+
+const messageSchema = new Schema<IMessage>(
    {
       sender: {
          type: Types.ObjectId,
@@ -24,6 +26,8 @@ const messageSchema = new Schema(
    },
    {
       timestamps: true,
+      id: false,
+
    }
 );
 
