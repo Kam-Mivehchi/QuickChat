@@ -3,17 +3,20 @@ import ReactDOM from 'react-dom/client'
 // import App from './App.tsx'
 import Layout from "./layout/index";
 import ErrorPage from "./pages/error";
-import Chat from "./pages/chat";
+import ChatDash from "./pages/chat";
+import SingleChat from "./pages/chat/chatId/index";
+import AllChats from './pages/chat/allChats'
+import ChatSettings from "./pages/chat/chatId/settings";
 import Home from "./pages/home";
 import Profile from "./pages/profile";
-import Login from "./pages/home/login";
-import Register from "./pages/home/register";
+import { allChatLoader, chatMessagesLoader } from './utils/loaders';
 import {
   createBrowserRouter,
   RouterProvider,
+  Navigate
 } from "react-router-dom";
 import './index.css'
-
+import Auth from "./utils/auth"
 const router = createBrowserRouter([
   {
     path: "/",
@@ -22,29 +25,37 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: Auth.loggedIn() ? <Navigate to="/chat" /> : <Home />,
+        errorElement: <ErrorPage />,
       },
       {
         path: "chat",
-        element: <Chat />,
+        element: Auth.loggedIn() ? <ChatDash /> : <Navigate to="/" />,
+        errorElement: <ErrorPage />,
         children: [
           {
+            path: "/chat/",
+            element: Auth.loggedIn() ? <AllChats /> : <Navigate to="/" />,
+            loader: allChatLoader,
+            errorElement: <ErrorPage />,
+          },
+          {
             path: "/chat/:chatId",
-            element: <Home />,
+            element: Auth.loggedIn() ? <SingleChat /> : <Navigate to="/" />,
+            loader: chatMessagesLoader,
+            errorElement: <ErrorPage />,
+          },
+          {
+            path: "/chat/:chatId/settings",
+            element: Auth.loggedIn() ? <ChatSettings /> : <Navigate to="/" />,
+            errorElement: <ErrorPage />,
           },
         ]
       },
       {
         path: "user/:userId",
-        element: <Profile />,
-      },
-      {
-        path: "login",
-        element: <Login />,
-      },
-      {
-        path: "register",
-        element: <Register />,
+        element: Auth.loggedIn() ? <Profile /> : <Navigate to="/" />,
+        errorElement: <ErrorPage />,
       },
     ],
   },

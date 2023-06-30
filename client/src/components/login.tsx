@@ -1,7 +1,7 @@
 import * as react from 'react';
 import axios from 'axios';
-import useApi from '../../utils/hooks';
-import Auth from '../../utils/auth';
+import useApi from '../utils/hooks';
+import Auth from '../utils/auth';
 export interface IAuthenticationProps {
 }
 
@@ -14,18 +14,14 @@ export default function Login(props: IAuthenticationProps) {
    const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       try {
-         // const mutationResponse = await login({
-         //    variables: { email: formState.email, password: formState.password },
-         // });
-         console.log("workin")
+
+
          setLoading(true)
-         // const token = mutationResponse.data.login.token;
          const response = await axios({
             method: "post", //you can set what request you want to be
             url: baseURL + '/users/login',
             data: formState
          })
-
 
          Auth.login(response.data.token);
          setLoading(false)

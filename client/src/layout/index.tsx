@@ -1,5 +1,5 @@
 import { Outlet, Link, useNavigation } from "react-router-dom";
-
+import Auth from '../utils/auth';
 export default function Layout() {
    const navigation = useNavigation();
    return (
@@ -11,8 +11,7 @@ export default function Layout() {
                <nav>
                   <Link to={`/`}>Home</Link>
                   <Link to={`/chat`}>Chat</Link>
-                  <Link to={`/login`}>Login</Link>
-                  <Link to={`/register`}>Register</Link>
+                  <button className={`btn btn-error ${Auth.loggedIn() ? "inline-block" : "hidden"}`} onClick={() => Auth.logout()}>Sign Out</button>
                </nav>
             </header>
 
