@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getChatById = exports.deleteChat = exports.removeMemberFromChat = exports.addMemberToChat = exports.createChat = exports.getSingleChat = void 0;
+exports.allMessages = exports.sendMessage = exports.getChatById = exports.deleteChat = exports.removeMemberFromChat = exports.addMemberToChat = exports.createChat = exports.getSingleChat = void 0;
 const chatroom_1 = __importDefault(require("../models/chatroom"));
+const message_1 = __importDefault(require("../models/message"));
 // get single room only for dm
 function getSingleChat(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -96,7 +97,7 @@ function removeMemberFromChat(req, res) {
             //members should be entered as an array of ids
             const { members } = req.body;
             const { chatId } = req.params;
-            const addUser = yield chatroom_1.default.findByIdAndUpdate(chatId, {
+            const removeMember = yield chatroom_1.default.findByIdAndUpdate(chatId, {
                 $pullAll: { members: members },
             }, {
                 new: true,
@@ -104,7 +105,7 @@ function removeMemberFromChat(req, res) {
                 .populate("members", "-password")
                 .populate("admin", "-password")
                 .select("-__v");
-            res.json(addUser);
+            res.json(removeMember);
         }
         catch (error) {
             console.error(error);
@@ -147,3 +148,43 @@ function getChatById(req, res) {
     });
 }
 exports.getChatById = getChatById;
+function sendMessage(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { content } = req.body;
+        const { chatId } = req.params;
+        if (!content || !chatId) {
+            res.status(500).json({ message: "Bad Request: missing message or chatId" });
+            return;
+        }
+        let newMessage = {
+            sender: req.user._id,
+            content: content,
+            chatroom: chatId,
+        };
+        let message = yield message_1.default.create(newMessage);
+        message = yield message.populate("sender", "username avatar");
+        message = yield message.populate("chatroom");
+        yield chatroom_1.default.findByIdAndUpdate(chatId, { lastMessage: message }, { new: true });
+        res.json(message);
+    });
+}
+exports.sendMessage = sendMessage;
+;
+function allMessages(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const { chatId } = req.params;
+            console.log(chatId);
+            const getMessage = yield message_1.default.find({ chatroom: chatId })
+                .populate("sender", "username avatar email _id")
+                .populate("chatroom").select("-__v");
+            res.json(getMessage);
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json(error);
+        }
+    });
+}
+exports.allMessages = allMessages;
+;

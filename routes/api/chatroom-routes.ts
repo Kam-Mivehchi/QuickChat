@@ -1,8 +1,8 @@
 import { Router } from "express"
-import { allMessages, sendMessage } from '../../controllers/message-controller'
 
 
-import { getSingleChat, createChat, addMemberToChat, removeMemberFromChat, deleteChat, getChatById } from '../../controllers/chatroom-controller'
+
+import { getSingleChat, createChat, addMemberToChat, removeMemberFromChat, deleteChat, getChatById, allMessages, sendMessage } from '../../controllers/chatroom-controller'
 
 
 const router = Router();

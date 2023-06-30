@@ -1,5 +1,7 @@
-import User, { IUser } from '../models/user';
+
 import Chatroom, { IChatroom } from '../models/chatroom';
+import Message, { IMessage } from '../models/message';
+
 import { Request, Response } from 'express';
 
 // get single room only for dm
@@ -104,7 +106,7 @@ export async function removeMemberFromChat(req: Request, res: Response) {
       const { members } = req.body;
       const { chatId } = req.params;
 
-      const addUser = await Chatroom.findByIdAndUpdate(
+      const removeMember = await Chatroom.findByIdAndUpdate(
          chatId,
          {
             $pullAll: { members: members },
@@ -116,7 +118,7 @@ export async function removeMemberFromChat(req: Request, res: Response) {
          .populate("members", "-password")
          .populate("admin", "-password")
          .select("-__v");
-      res.json(addUser)
+      res.json(removeMember)
    } catch (error) {
       console.error(error);
       res.status(500).json(error);
@@ -152,7 +154,7 @@ export async function getChatById(req: Request, res: Response) {
          .populate("lastMessage")
          .select("-__v");
 
-      res.json(chat);
+      res.json(chat as unknown as IChatroom);
 
 
    } catch (error) {
@@ -160,3 +162,46 @@ export async function getChatById(req: Request, res: Response) {
       res.status(500).json(error);
    }
 }
+
+
+export async function sendMessage(req: Request, res: Response) {
+   const { content } = req.body;
+   const { chatId } = req.params;
+
+   if (!content || !chatId) {
+      res.status(500).json({ message: "Bad Request: missing message or chatId" });
+      return
+   }
+
+   let newMessage = {
+      sender: req.user!._id,
+      content: content,
+      chatroom: chatId,
+   };
+
+   let message = await Message.create(newMessage);
+
+   message = await message.populate("sender", "username avatar");
+   message = await message.populate("chatroom");
+
+
+   await Chatroom.findByIdAndUpdate(chatId, { lastMessage: message }, { new: true }) as IChatroom;
+
+   res.json(message as unknown as IMessage);
+};
+
+export async function allMessages(req: Request, res: Response) {
+   try {
+      const { chatId } = req.params;
+      console.log(chatId);
+      const getMessage = await Message.find({ chatroom: chatId })
+         .populate("sender", "username avatar email _id")
+         .populate("chatroom").select("-__v");
+
+      res.json(getMessage as unknown as IMessage);
+
+   } catch (error) {
+      console.error(error);
+      res.status(500).json(error)
+   }
+};

@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai';
-import User, { INewUser, IUser } from '../../models/user'
-import Chatroom, { IChatroom, INewChatroom } from '../../models/chatroom'
-import Message from '../../models/message'
+import User, { INewUser, IUser } from '../models/user'
+import Chatroom, { IChatroom, INewChatroom } from '../models/chatroom'
+import Message from '../models/message'
 import chaiHttp from 'chai-http';
 import mongoose from 'mongoose';
 chai.use(chaiHttp);
@@ -49,12 +49,11 @@ describe('Message Routes', () => {
          expect(response.body).to.be.an('object');
          expect(response.body).to.have.all.keys('_id', "chatroom", "content", "__v", "updatedAt", "createdAt", "sender");
 
-         const message = Message.findOne({ _id: response.body._id })
+         const message = await Message.findOne({ _id: response.body._id })
 
-         expect(response.status).to.equal(200);
-         expect(response.body).to.be.an('object');
+         expect(message).to.be.an('object');
 
-         expect(response.body.content).to.equal("this is a test")
+         expect(message!.content).to.equal("this is a test")
 
 
 
