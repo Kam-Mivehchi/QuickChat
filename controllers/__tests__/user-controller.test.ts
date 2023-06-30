@@ -1,8 +1,9 @@
 import chai, { expect } from 'chai';
-import User, { INewUser, IUser } from '../../models/user'
-import Chatroom, { IChatroom } from '../../models/chatroom'
+import { User, IUser } from '../../models'
 import chaiHttp from 'chai-http';
 import mongoose, { ObjectId } from 'mongoose';
+
+
 chai.use(chaiHttp);
 const request = chai.request("http://localhost:3001");
 
@@ -19,7 +20,7 @@ describe('User Routes', () => {
          username: "User-controller-test_Member1",
          email: "User-controller-test_Member1@test.com",
          password: "asdfasdf"
-      } as INewUser)
+      } as IUser)
 
    });
    after(async () => {
@@ -33,7 +34,7 @@ describe('User Routes', () => {
 
 
    describe("/api/users", () => {
-      const newUser: INewUser = {
+      const newUser = {
          username: "controller-test-user",
          email: "controller-test-user@email.com",
          password: "asdfasdf"

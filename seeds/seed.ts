@@ -1,7 +1,7 @@
 import db from '../config/connection'
 import { User, Chatroom, Message } from '../models'
-import { IUser } from '../models/user';
 import bcrypt from 'bcrypt'
+
 import userData from './userData.json'
 import messageData from './messageData.json'
 

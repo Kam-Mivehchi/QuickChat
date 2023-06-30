@@ -2,7 +2,6 @@
 import { Router } from "express"
 import userRoutes from "./user-routes"
 import chatroomRoutes from "./chatroom-routes"
-
 import { authMiddleware } from "../../utils/auth";
 
 const router = Router();

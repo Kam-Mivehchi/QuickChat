@@ -8,19 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUserChats = exports.deleteUser = exports.updatePassword = exports.updateUser = exports.getMe = exports.getUsers = exports.login = exports.register = void 0;
-const user_1 = __importDefault(require("../models/user"));
-const chatroom_1 = __importDefault(require("../models/chatroom"));
+const models_1 = require("../models");
 const auth_1 = require("../utils/auth");
 //create an account and token
 function register(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const user = yield user_1.default.create(req.body);
+            const user = yield models_1.User.create(req.body);
             const { _id, username, email } = user;
             if (!user) {
                 return res.status(400).json({ message: 'Something is wrong!' });
@@ -39,7 +35,7 @@ exports.register = register;
 //login
 function login({ body }, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const user = yield user_1.default.findOne({ $or: [{ username: body.username }, { email: body.email }] }).select('-__v');
+        const user = yield models_1.User.findOne({ $or: [{ username: body.username }, { email: body.email }] }).select('-__v');
         if (!user) {
             return res.status(400).json({ message: "Can't find this user" });
         }
@@ -57,7 +53,7 @@ exports.login = login;
 function getUsers(_req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const allUsers = yield user_1.default.find()
+            const allUsers = yield models_1.User.find()
                 .select('-__v');
             res.json(allUsers);
         }
@@ -72,7 +68,7 @@ exports.getUsers = getUsers;
 function getMe(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const user = yield user_1.default.findOne({ _id: req.params.userId })
+            const user = yield models_1.User.findOne({ _id: req.params.userId })
                 .select('-__v');
             if (!user) {
                 return res.status(400).json({ message: 'Cannot find a user with this id!' });
@@ -94,7 +90,7 @@ function updateUser(req, res) {
             return res.status(404).json({ message: 'Cannot updated password with this route, Use /api/users/:id/recovery' });
         }
         try {
-            const updatedUser = yield user_1.default.findOneAndUpdate({ _id: req.params.userId }, {
+            const updatedUser = yield models_1.User.findOneAndUpdate({ _id: req.params.userId }, {
                 $set: req.body,
             }, {
                 runValidators: true,
@@ -115,7 +111,7 @@ exports.updateUser = updateUser;
 function updatePassword(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const user = yield user_1.default.findOne({ _id: req.params.userId }).select('-__v');
+            const user = yield models_1.User.findOne({ _id: req.params.userId }).select('-__v');
             if (!user) {
                 return res.status(404).json({ message: 'No user with this id!' });
             }
@@ -135,7 +131,7 @@ exports.updatePassword = updatePassword;
 function deleteUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield user_1.default.findOneAndDelete({ _id: req.params.userId });
+            yield models_1.User.findOneAndDelete({ _id: req.params.userId });
             res.json({ message: 'User and associated thoughts deleted!' });
         }
         catch (error) {
@@ -150,7 +146,7 @@ function getUserChats(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         //
         try {
-            const allChats = yield chatroom_1.default.find({ members: { $elemMatch: { $eq: req.user._id } } })
+            const allChats = yield models_1.Chatroom.find({ members: { $elemMatch: { $eq: req.user._id } } })
                 .populate("members", "-password")
                 .populate("admin", "-password")
                 .populate("lastMessage")

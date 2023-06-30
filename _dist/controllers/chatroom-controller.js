@@ -8,13 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.allMessages = exports.sendMessage = exports.getChatById = exports.deleteChat = exports.removeMemberFromChat = exports.addMemberToChat = exports.createChat = exports.getSingleChat = void 0;
-const chatroom_1 = __importDefault(require("../models/chatroom"));
-const message_1 = __importDefault(require("../models/message"));
+const models_1 = require("../models");
 // get single room only for dm
 function getSingleChat(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -24,7 +20,7 @@ function getSingleChat(req, res) {
             if (!members.length) {
                 return res.send("No User Provided!");
             }
-            let chat = yield chatroom_1.default.find({
+            let chat = yield models_1.Chatroom.find({
                 $and: [
                     { members: { $elemMatch: { $eq: req.user._id } } },
                     { members: { $elemMatch: { $eq: members } } },
@@ -51,12 +47,12 @@ function createChat(req, res) {
             //members should be entered as an array of ids
             const { members } = req.body;
             // should be a fallback for getSingleChat
-            const createChat = yield chatroom_1.default.create({
+            const createChat = yield models_1.Chatroom.create({
                 chatName: "Direct Message",
                 members: [req.user._id, ...members],
                 admin: req.user._id
             });
-            const fullChat = yield chatroom_1.default.findOne({ _id: createChat._id }).populate("members", "-password").select("-__v");
+            const fullChat = yield models_1.Chatroom.findOne({ _id: createChat._id }).populate("members", "-password").select("-__v");
             res.json(fullChat);
         }
         catch (error) {
@@ -73,7 +69,7 @@ function addMemberToChat(req, res) {
             //members should be entered as an array of ids
             const { members } = req.body;
             const { chatId } = req.params;
-            const addUser = yield chatroom_1.default.findByIdAndUpdate(chatId, {
+            const addUser = yield models_1.Chatroom.findByIdAndUpdate(chatId, {
                 $addToSet: { members: { $each: members } },
             }, {
                 new: true,
@@ -97,7 +93,7 @@ function removeMemberFromChat(req, res) {
             //members should be entered as an array of ids
             const { members } = req.body;
             const { chatId } = req.params;
-            const removeMember = yield chatroom_1.default.findByIdAndUpdate(chatId, {
+            const removeMember = yield models_1.Chatroom.findByIdAndUpdate(chatId, {
                 $pullAll: { members: members },
             }, {
                 new: true,
@@ -118,11 +114,11 @@ exports.removeMemberFromChat = removeMemberFromChat;
 function deleteChat(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const toDelete = yield chatroom_1.default.findOne({ _id: req.params.chatId });
+            const toDelete = yield models_1.Chatroom.findOne({ _id: req.params.chatId });
             if (req.user._id.toString() !== (toDelete === null || toDelete === void 0 ? void 0 : toDelete.admin.toString())) {
                 return res.status(402).json({ message: 'Only the admin can delete this chat' });
             }
-            yield chatroom_1.default.findOneAndDelete({ _id: req.params.chatId });
+            yield models_1.Chatroom.findOneAndDelete({ _id: req.params.chatId });
             res.json({ message: 'Chat has been deleted!' });
         }
         catch (error) {
@@ -135,7 +131,7 @@ exports.deleteChat = deleteChat;
 function getChatById(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const chat = yield chatroom_1.default.findOne({ _id: req.params.chatId })
+            const chat = yield models_1.Chatroom.findOne({ _id: req.params.chatId })
                 .populate("members", "-password")
                 .populate("lastMessage")
                 .select("-__v");
@@ -161,10 +157,10 @@ function sendMessage(req, res) {
             content: content,
             chatroom: chatId,
         };
-        let message = yield message_1.default.create(newMessage);
+        let message = yield models_1.Message.create(newMessage);
         message = yield message.populate("sender", "username avatar");
         message = yield message.populate("chatroom");
-        yield chatroom_1.default.findByIdAndUpdate(chatId, { lastMessage: message }, { new: true });
+        yield models_1.Chatroom.findByIdAndUpdate(chatId, { lastMessage: message }, { new: true });
         res.json(message);
     });
 }
@@ -175,7 +171,7 @@ function allMessages(req, res) {
         try {
             const { chatId } = req.params;
             console.log(chatId);
-            const getMessage = yield message_1.default.find({ chatroom: chatId })
+            const getMessage = yield models_1.Message.find({ chatroom: chatId })
                 .populate("sender", "username avatar email _id")
                 .populate("chatroom").select("-__v");
             res.json(getMessage);

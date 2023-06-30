@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "pretest": "npm run seed",
     "test": "mocha -r ts-node/register '**/__tests__/**/*.ts'",
     "preseed": "npm run build",
     "seed": "node _dist/seeds/seed.js",

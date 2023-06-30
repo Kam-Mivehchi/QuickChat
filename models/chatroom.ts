@@ -10,13 +10,7 @@ export interface IChatroom extends Document {
    isGroup: () => boolean;
 
 }
-export interface INewChatroom {
-   roomName?: string;
-   members?: ObjectId[];
-   lastMessage?: ObjectId;
-   admin?: ObjectId;
 
-}
 
 const chatroomSchema = new Schema<IChatroom>(
    {

@@ -1,7 +1,5 @@
 import chai, { expect } from 'chai';
-import User, { INewUser, IUser } from '../../models/user'
-import Chatroom, { IChatroom, INewChatroom } from '../../models/chatroom'
-import Message from '../../models/message'
+import { IChatroom, IUser, User, Message } from '../../models/'
 import chaiHttp from 'chai-http';
 import mongoose from 'mongoose';
 chai.use(chaiHttp);
@@ -25,13 +23,13 @@ describe('Chat Routes', () => {
          username: "Chat-controller-test_Admin",
          email: "Chat-controller-test_Admin@test.com",
          password: "asdfasdf"
-      } as INewUser)
+      } as IUser)
 
       const response = await request.post('/api/users/login').send({
          username: "Chat-controller-test_Admin",
          email: "Chat-controller-test_Admin@test.com",
          password: "asdfasdf"
-      } as INewUser)
+      } as IUser)
 
       token = response.body.token
 
@@ -40,12 +38,12 @@ describe('Chat Routes', () => {
          username: "Chat-controller-test_Member1",
          email: "Chat-controller-test_Member1@test.com",
          password: "asdfasdf"
-      } as INewUser)
+      } as IUser)
       member2 = await User.create({
          username: "Chat-controller-test_Member2",
          email: "Chat-controller-test_Member2@test.com",
          password: "asdfasdf"
-      } as INewUser)
+      } as IUser)
 
       //1 admin
 
@@ -165,7 +163,7 @@ describe('Message Routes', () => {
       let response2 = await request.get(`/api/users/chats`).set("Authorization", "Bearer " + token)
       test_chat = response2.body[0]
 
-      console.log(test_chat)
+
    });
 
    after(async () => {

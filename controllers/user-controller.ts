@@ -1,5 +1,5 @@
-import User, { IUser } from '../models/user';
-import Chatroom, { IChatroom } from '../models/chatroom';
+
+import { User, IUser, Chatroom, IChatroom } from '../models';
 import { Request, Response } from 'express';
 import { generateToken, UserPayload } from '../utils/auth';
 
@@ -155,7 +155,7 @@ export async function getUserChats(req: Request, res: Response) {
          .sort({ updatedAt: -1 });
 
 
-      res.json(allChats)
+      res.json(allChats as unknown as IChatroom[])
 
    } catch (error) {
       console.error(error);

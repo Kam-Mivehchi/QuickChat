@@ -1,7 +1,4 @@
 import { Router } from "express"
-
-
-
 import { getSingleChat, createChat, addMemberToChat, removeMemberFromChat, deleteChat, getChatById, allMessages, sendMessage } from '../../controllers/chatroom-controller'
 
 

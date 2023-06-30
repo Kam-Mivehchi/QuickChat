@@ -1,7 +1,4 @@
-
-import Chatroom, { IChatroom } from '../models/chatroom';
-import Message, { IMessage } from '../models/message';
-
+import { Message, IMessage, Chatroom, IChatroom } from '../models';
 import { Request, Response } from 'express';
 
 // get single room only for dm
@@ -31,7 +28,7 @@ export async function getSingleChat(req: Request, res: Response) {
          return createChat(req, res)
       }
 
-      res.json(chat[0])
+      res.json(chat[0] as unknown as IChatroom)
 
    } catch (error) {
 
@@ -62,7 +59,7 @@ export async function createChat(req: Request, res: Response) {
          "-password"
       ).select("-__v");
 
-      res.json(fullChat);
+      res.json(fullChat as unknown as IChatroom);
    } catch (error) {
 
       console.error(error);
@@ -91,7 +88,7 @@ export async function addMemberToChat(req: Request, res: Response) {
          .populate("admin", "-password")
          .select("-__v");
 
-      res.json(addUser)
+      res.json(addUser as unknown as IChatroom)
    } catch (error) {
       console.error(error);
       res.status(500).json(error);
@@ -118,7 +115,7 @@ export async function removeMemberFromChat(req: Request, res: Response) {
          .populate("members", "-password")
          .populate("admin", "-password")
          .select("-__v");
-      res.json(removeMember)
+      res.json(removeMember as unknown as IChatroom)
    } catch (error) {
       console.error(error);
       res.status(500).json(error);

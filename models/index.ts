@@ -1,5 +1,5 @@
-import User from './user'
-import Chatroom from './chatroom'
-import Message from './message'
+import User, { IUser } from './user'
+import Chatroom, { IChatroom } from './chatroom'
+import Message, { IMessage } from './message'
 
-export { User, Chatroom, Message };
+export { User, IUser, Chatroom, IChatroom, Message, IMessage };

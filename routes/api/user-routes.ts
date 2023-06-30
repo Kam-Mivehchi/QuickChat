@@ -1,6 +1,4 @@
 import { Router } from "express"
-
-// import { getUsers } from '../../controllers/user-controller'
 import { getUsers, getMe, login, register, updateUser, updatePassword, deleteUser, getUserChats } from '../../controllers/user-controller'
 import { authMiddleware } from "../../utils/auth";
 
