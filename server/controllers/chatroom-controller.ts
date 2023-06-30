@@ -190,7 +190,7 @@ export async function sendMessage(req: Request, res: Response) {
 export async function allMessages(req: Request, res: Response) {
    try {
       const { chatId } = req.params;
-      console.log(chatId);
+
       const getMessage = await Message.find({ chatroom: chatId })
          .populate("sender", "username avatar email _id")
          .populate("chatroom").select("-__v");
