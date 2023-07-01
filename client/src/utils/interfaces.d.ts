@@ -27,8 +27,8 @@ declare global {
       password: string;
       avatar?: string;
       bio?: string;
-      isCorrectPassword(password: string): boolean;
-      updatedAt: string;
-      createdAt: string;
+      isCorrectPassword?(password: string): boolean;
+      updatedAt?: string;
+      createdAt?: string;
    }
 }

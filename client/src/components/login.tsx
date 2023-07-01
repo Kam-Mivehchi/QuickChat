@@ -1,6 +1,6 @@
 import * as react from 'react';
 import axios from 'axios';
-import useApi from '../utils/hooks';
+
 import Auth from '../utils/auth';
 export interface IAuthenticationProps {
 }

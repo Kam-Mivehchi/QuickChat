@@ -4,22 +4,40 @@ import {
    useLoaderData,
    Link,
 } from "react-router-dom";
-
+import { useSelector, useDispatch } from 'react-redux'
+import { ActionTypes, AppState } from "../../utils/redux/reducers.tsx"
 export interface IChatProps {
 }
 //use data loaders https://reactrouter.com/en/main/start/tutorial
 
 export default function Chat(props: IChatProps) {
+   const dispatch = useDispatch()
+   const state = useSelector(state => state) as AppState
    const data = useLoaderData() as IChatroom[];
+
    console.log(data)
+
+   React.useEffect(() => {
+      dispatch({ type: ActionTypes.SET_LOADING, loading: true });
+
+
+      dispatch({ type: ActionTypes.SET_ALL_CHATS, chatroom: [...data] });
+      dispatch({ type: ActionTypes.SET_LOADING, loading: false });
+
+      console.log(state.allChats)
+   }, [])
+   if (state.isLoading) {
+      return <div className="loader">loading</div>
+
+   }
    return (
       <div>
          All Chats
          {
-            data.map((chatroom: IChatroom,) => {
+            state.allChats.map((chatroom: IChatroom,) => {
 
                return (
-                  <Link to={`/chat/${chatroom._id}`}>
+                  <Link to={`/chat/${chatroom._id}`} >
 
                      <div key={`${chatroom._id}`} className="border-4 border-black" >
                         <h1 className="h1">{chatroom.roomName}</h1>
