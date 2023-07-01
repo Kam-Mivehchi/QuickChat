@@ -12,6 +12,7 @@ const routes_1 = __importDefault(require("./routes"));
 const connection_1 = __importDefault(require("./config/connection"));
 const cors_1 = __importDefault(require("cors"));
 require("dotenv/config");
+const admin_ui_1 = require("@socket.io/admin-ui");
 const PORT = process.env.PORT || 3001;
 const app = (0, express_1.default)();
 app.use(express_1.default.urlencoded({ extended: true }));
@@ -24,6 +25,10 @@ const io = new socket_io_1.Server(httpServer, {
     cors: {
         origin: "*",
     },
+});
+(0, admin_ui_1.instrument)(io, {
+    auth: false,
+    mode: "development",
 });
 io.on("connection", (socket) => {
     //connected to correct id
@@ -43,9 +48,9 @@ io.on("connection", (socket) => {
         if (!members.length)
             return console.log(`chat.users not defined`);
         members.forEach((user) => {
-            if (user._id === sender._id)
+            if (user === sender._id)
                 return;
-            socket.in(user._id).emit("message-received", newMessageReceived);
+            socket.in(user).emit("message-received", newMessageReceived);
         });
     });
     socket.off("setup", (userData) => {

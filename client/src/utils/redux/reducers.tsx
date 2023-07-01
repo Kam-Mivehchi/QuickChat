@@ -11,13 +11,33 @@ const initialState: AppState = {
    },
    unread: [],
    allChats: [],
-   currentChat: "",
+   currentChat: {
+      _id: "",
+      roomName: "",
+      members: [],
+      lastMessage: "",
+      admin: "",
+      isGroup: false,
+      updatedAt: "",
+      createdAt: "",
+   },
    chatMessages: [],
    isUserTyping: false,
    isRecipientTyping: false,
    isLoading: false,
    isError: false,
 };
+interface IChatroomResponse {
+   _id: string;
+   roomName: string;
+   members: string[];
+   lastMessage: string;
+   admin: string;
+   isGroup: boolean;
+   updatedAt: string;
+   createdAt: string;
+
+}
 
 // Create the reducer
 const appReducer: Reducer<AppState, AppAction> = (state = initialState, action) => {
@@ -27,10 +47,15 @@ const appReducer: Reducer<AppState, AppAction> = (state = initialState, action) 
             ...state,
             currentUser: action.user
          };
-      case ActionTypes.UPDATE_UNREAD:
+      case ActionTypes.ADD_TO_UNREAD:
          return {
             ...state,
-            counter: [...state.unread, action.message],
+            message: [...state.unread, action.message],
+         };
+      case ActionTypes.REMOVE_FROM_UNREAD:
+         return {
+            ...state,
+            message: state.unread.filter((message) => message._id !== action.message._id),
          };
       case ActionTypes.SET_CURRENT_CHAT:
          return {
@@ -93,7 +118,8 @@ export default appReducer;
 // Define the actions
 export enum ActionTypes {
    SET_CURRENT_USER = 'SET_CURRENT_USER',
-   UPDATE_UNREAD = 'UPDATE_UNREAD',
+   ADD_TO_UNREAD = 'ADD_TO_UNREAD',
+   REMOVE_FROM_UNREAD = 'REMOVE_FROM_UNREAD',
    SET_CURRENT_CHAT = 'SET_CURRENT_CHAT',
    SET_MESSAGES = "SET_MESSAGES",
    ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE",
@@ -109,7 +135,7 @@ export enum ActionTypes {
 export interface AppState {
    currentUser: IUserState;
    unread: IMessage[];
-   currentChat: string;
+   currentChat: IChatroomResponse;
    chatMessages: IMessage[];
    allChats: IChatroom[];
    isUserTyping: boolean;
@@ -133,12 +159,16 @@ interface CurrentUserAction {
    type: ActionTypes.SET_CURRENT_USER;
 }
 
-interface UnreadAction {
+interface AddUnreadAction {
    message: IMessage;
-   type: ActionTypes.UPDATE_UNREAD;
+   type: ActionTypes.ADD_TO_UNREAD;
+}
+interface RemoveUnreadAction {
+   message: IMessage;
+   type: ActionTypes.REMOVE_FROM_UNREAD;
 }
 interface CurrentChatAction {
-   chatroom: string;
+   chatroom: IChatroomResponse;
    type: ActionTypes.SET_CURRENT_CHAT;
 }
 interface CurrentMessagesAction {
@@ -178,5 +208,5 @@ interface SetError {
    type: ActionTypes.SET_ERROR;
 }
 
-type AppAction = CurrentUserAction | UnreadAction | CurrentChatAction | NewMessageAction | RemoveFromAllChatsAction | AddToAllChatsAction | UpdateUserTyping | UpdateRecipientTyping | SetChatsAction | SetLoading | SetError | CurrentMessagesAction;
+type AppAction = CurrentUserAction | RemoveUnreadAction | AddUnreadAction | CurrentChatAction | NewMessageAction | RemoveFromAllChatsAction | AddToAllChatsAction | UpdateUserTyping | UpdateRecipientTyping | SetChatsAction | SetLoading | SetError | CurrentMessagesAction;
 

@@ -8,8 +8,8 @@ import db from './config/connection'
 import cors from "cors";
 import 'dotenv/config'
 import { IChatroom, IUser, IMessage } from "./models";
-
-
+import { instrument } from "@socket.io/admin-ui"
+import { ObjectId } from 'mongoose'
 const PORT = process.env.PORT || 3001;
 const app: Express = express();
 
@@ -28,7 +28,10 @@ const io = new Server(httpServer, {
       origin: "*",
    },
 });
-
+instrument(io, {
+   auth: false,
+   mode: "development",
+});
 io.on("connection", (socket) => {
    //connected to correct id
    socket.on("setup", (userData: IUser) => {
@@ -45,15 +48,16 @@ io.on("connection", (socket) => {
    socket.on("stop-typing", (room: string) => socket.in(room).emit("stop-typing"));
 
    socket.on("new-message", (newMessageReceived: IMessage) => {
+
       let chat = newMessageReceived.chatroom as IChatroom;
-      let members = chat.members as unknown as IUser[];
+      let members = chat.members as ObjectId[];
       let sender = newMessageReceived.sender as unknown as IUser;
       if (!members.length) return console.log(`chat.users not defined`);
 
       members.forEach((user) => {
-         if (user._id === sender._id) return;
+         if (user === sender._id) return;
 
-         socket.in(user._id as unknown as string).emit("message-received", newMessageReceived);
+         socket.in(user as unknown as string).emit("message-received", newMessageReceived);
       });
    });
 
