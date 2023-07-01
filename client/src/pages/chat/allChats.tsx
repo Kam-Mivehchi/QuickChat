@@ -34,8 +34,8 @@ export default function Chat(props: IChatProps) {
       <div>
          All Chats
          {
-            state.allChats.map((chatroom: IChatroom,) => {
-
+            state.allChats.map((chatroom: IChatroom) => {
+               // console.log(chatroom.lastMessage?.sender)
                return (
                   <Link to={`/chat/${chatroom._id}`} >
 
@@ -59,7 +59,7 @@ export default function Chat(props: IChatProps) {
                            :
 
                            <div className="lastMessage border-2" data-message={chatroom.lastMessage._id} >
-
+                              Lastmessage
                               <img src={chatroom.lastMessage.sender.avatar} alt={`${chatroom.lastMessage.sender.avatar} avatar image`} />
                               <p>
 

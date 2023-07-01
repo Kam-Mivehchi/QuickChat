@@ -172,7 +172,13 @@ function allMessages(req, res) {
             const { chatId } = req.params;
             const getMessage = yield models_1.Message.find({ chatroom: chatId })
                 .populate("sender", "username avatar email _id")
-                .populate("chatroom").select("-__v");
+                .populate({
+                path: "chatroom",
+                populate: {
+                    path: "members",
+                    model: "User"
+                }
+            }).select("-__v");
             res.json(getMessage);
         }
         catch (error) {

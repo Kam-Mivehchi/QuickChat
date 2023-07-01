@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/Kam-Mivehchi/QuickChat/issues"
   },
-  "homepage": "https://github.com/Kam-Mivehchi/QuickChat#readme"
+  "homepage": "https://github.com/Kam-Mivehchi/QuickChat#readme",
+  "dependencies": {
+    "dayjs": "^1.11.9"
+  }
 }

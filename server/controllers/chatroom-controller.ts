@@ -193,7 +193,13 @@ export async function allMessages(req: Request, res: Response) {
 
       const getMessage = await Message.find({ chatroom: chatId })
          .populate("sender", "username avatar email _id")
-         .populate("chatroom").select("-__v");
+         .populate({
+            path: "chatroom",
+            populate: {
+               path: "members",
+               model: "User"
+            }
+         }).select("-__v");
 
       res.json(getMessage as unknown as IMessage);
 

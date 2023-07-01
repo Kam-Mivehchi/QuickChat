@@ -30,7 +30,7 @@ const initialState: AppState = {
 interface IChatroomResponse {
    _id: string;
    roomName: string;
-   members: string[];
+   members: IUser[];
    lastMessage: string;
    admin: string;
    isGroup: boolean;

@@ -151,7 +151,13 @@ export async function getUserChats(req: Request, res: Response) {
       const allChats = await Chatroom.find({ members: { $elemMatch: { $eq: req.user!._id } } })
          .populate("members", "-password")
          .populate("admin", "-password")
-         .populate("lastMessage")
+         .populate({
+            path: "lastMessage",
+            populate: {
+               path: "sender",
+               model: "User"
+            }
+         })
          .sort({ updatedAt: -1 });
 
 
