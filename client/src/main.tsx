@@ -9,7 +9,7 @@ import AllChats from './pages/chat/allChats'
 
 import Home from "./pages/home";
 import Profile from "./pages/profile";
-import { allChatLoader, chatMessagesLoader } from './utils/loaders';
+import { getAllChats, getAllMessages } from './utils/api';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -36,13 +36,13 @@ const router = createBrowserRouter([
           {
             path: "/chat/",
             element: Auth.loggedIn() ? <AllChats /> : <Navigate to="/" />,
-            loader: allChatLoader,
+            loader: getAllChats,
             errorElement: <ErrorPage />,
           },
           {
             path: "/chat/:chatId",
             element: Auth.loggedIn() ? <SingleChat /> : <Navigate to="/" />,
-            loader: chatMessagesLoader,
+            loader: getAllMessages,
             errorElement: <ErrorPage />,
           },
 

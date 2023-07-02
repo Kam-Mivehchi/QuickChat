@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
    useLoaderData,
-   Link,
    useParams
 } from "react-router-dom";
 import { io } from "socket.io-client";

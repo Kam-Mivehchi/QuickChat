@@ -1,35 +1,39 @@
 import * as react from 'react';
 import axios from 'axios';
-
+import { login } from '../utils/api';
 import Auth from '../utils/auth';
 export interface IAuthenticationProps {
 }
+import { useSelector, useDispatch, } from 'react-redux'
+import { ActionTypes, AppState } from "../utils/redux/reducers.tsx"
+import { AppDispatch } from "../utils/redux/store.tsx";
 
 export default function Login(props: IAuthenticationProps) {
    const [formState, setFormState] = react.useState({ email: '', password: '' });
    const [error, setError] = react.useState(false)
    const [loading, setLoading] = react.useState(false)
+   const dispatch = useDispatch<AppDispatch>()
+   const state = useSelector(state => state) as AppState
 
-   const baseURL = "http://localhost:3001/api"
    const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       try {
 
 
-         setLoading(true)
-         const response = await axios({
-            method: "post", //you can set what request you want to be
-            url: baseURL + '/users/login',
-            data: formState
-         })
 
-         Auth.login(response.data.token);
-         setLoading(false)
+         dispatch({ type: ActionTypes.SET_LOADING, loading: true });
+
+         const { token, user } = await login(formState)
+
+         Auth.login(token);
+
+         dispatch({ type: ActionTypes.SET_CURRENT_USER, user: user });
+         dispatch({ type: ActionTypes.SET_LOADING, loading: false });
 
       } catch (e) {
          console.log(e);
-         setLoading(false)
-         setError(!!e)
+         dispatch({ type: ActionTypes.SET_ERROR, error: !!e });
+         dispatch({ type: ActionTypes.SET_LOADING, loading: false });
 
       }
    };
