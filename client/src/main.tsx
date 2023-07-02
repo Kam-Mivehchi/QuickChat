@@ -6,7 +6,7 @@ import ErrorPage from "./pages/error";
 import ChatDash from "./pages/chat";
 import SingleChat from "./pages/chat/chatId/index";
 import AllChats from './pages/chat/allChats'
-import ChatSettings from "./pages/chat/chatId/settings";
+
 import Home from "./pages/home";
 import Profile from "./pages/profile";
 import { allChatLoader, chatMessagesLoader } from './utils/loaders';
@@ -45,11 +45,7 @@ const router = createBrowserRouter([
             loader: chatMessagesLoader,
             errorElement: <ErrorPage />,
           },
-          {
-            path: "/chat/:chatId/settings",
-            element: Auth.loggedIn() ? <ChatSettings /> : <Navigate to="/" />,
-            errorElement: <ErrorPage />,
-          },
+
         ]
       },
       {
