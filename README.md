@@ -1,5 +1,7 @@
 # Messaging App
-
+## Description
+Full stack messaging app built with typescript, Node, Express, MongoDB, React and Websockets
+## API Endpoints
 ## Users
 
    + GET /api/users/

@@ -5,7 +5,7 @@
   "main": "server/index.js",
   "scripts": {
     "test:server": "cd server && npm run test",
-    "dev": "concurrently \"cd server && npm run dev\" \"cd ../client && npm run start\"",
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\"",
     "seed": "cd server && npm run seed"
   },
   "repository": {
@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/Kam-Mivehchi/QuickChat/issues"
   },
-  "homepage": "https://github.com/Kam-Mivehchi/QuickChat#readme"
+  "homepage": "https://github.com/Kam-Mivehchi/QuickChat#readme",
+  "dependencies": {
+    "dayjs": "^1.11.9"
+  }
 }

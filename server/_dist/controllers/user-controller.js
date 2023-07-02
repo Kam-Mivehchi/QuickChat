@@ -149,7 +149,13 @@ function getUserChats(req, res) {
             const allChats = yield models_1.Chatroom.find({ members: { $elemMatch: { $eq: req.user._id } } })
                 .populate("members", "-password")
                 .populate("admin", "-password")
-                .populate("lastMessage")
+                .populate({
+                path: "lastMessage",
+                populate: {
+                    path: "sender",
+                    model: "User"
+                }
+            })
                 .sort({ updatedAt: -1 });
             res.json(allChats);
         }
