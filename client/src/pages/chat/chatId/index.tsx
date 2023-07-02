@@ -11,7 +11,7 @@ import { ActionTypes, AppState } from "../../../utils/redux/reducers.tsx"
 import { AppDispatch } from "../../../utils/redux/store.tsx";
 import { sendMessage } from "../../../utils/api"
 import ChatBubble from '../../../components/chatBubble.tsx'
-
+import dayjs from 'dayjs';
 
 
 export default function SingleChat() {
@@ -113,7 +113,7 @@ export default function SingleChat() {
    return (
       <>
          {/* chat header */}
-         <div className=" bg-base-200 flex items-center justify-between relative px-2">
+         <div className=" bg-base-200 flex items-center justify-between relative pxgi-2">
             {/* back to chats */}
             <Link to="/chat" className="btn p-0"> &lt; Back</Link>
             {/* Name of group and members component */}
@@ -173,9 +173,19 @@ export default function SingleChat() {
                <div className="absolute w-full"></div>
                <div className="overflow-auto">
 
-                  {state.chatMessages.map((message: IMessage) => {
+                  {state.chatMessages.map((message: IMessage, i: number) => {
                      return (
-                        <ChatBubble message={message} key={message._id} />
+                        <>
+                           {dayjs(message.createdAt).format("MMM D") !== dayjs(state.chatMessages[i ? i - 1 : 0].createdAt).format("MMM D") ?
+                              <div className="flex flex-col w-full border-opacity-50 p-5">
+
+                                 <div className="divider">{dayjs(message.createdAt).format("MMM D")}</div>
+
+                              </div>
+                              :
+                              null}
+                           <ChatBubble message={message} key={message._id} />
+                        </>
                      )
                   })}
 
