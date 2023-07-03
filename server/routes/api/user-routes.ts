@@ -1,10 +1,10 @@
 import { Router } from "express"
-import { getUsers, getMe, login, register, updateUser, updatePassword, deleteUser, getUserChats } from '../../controllers/user-controller'
+import { getMe, login, register, updateUser, updatePassword, deleteUser, getUserChats, searchUsers } from '../../controllers/user-controller'
 import { authMiddleware } from "../../utils/auth";
 
 const router = Router();
 
-router.route('/').get(authMiddleware, getUsers)
+router.route('/').post(authMiddleware, searchUsers)
 //every route should be protected
 router.route('/register').post(register)
 router.route('/login').post(login);
@@ -18,6 +18,6 @@ router.route('/:userId/recovery').put(authMiddleware, updatePassword)
 
 
 
-// console.log(getUsers)
+// console.log(searchUsers)
 
 export default router;
