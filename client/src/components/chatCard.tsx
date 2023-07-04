@@ -4,88 +4,72 @@ import {
 } from "react-router-dom";
 import dayjs from "dayjs"
 import Auth from "../utils/auth"
-
+import { useSelector, useDispatch, } from 'react-redux'
+import { ActionTypes, AppState } from "../utils/redux/reducers.tsx"
+import { AppDispatch } from "../utils/redux/store.tsx";
 
 
 function ChatCard({ chatroom }: { chatroom: IChatroom }) {
+   const dispatch = useDispatch<AppDispatch>()
 
    return (
-      <Link to={`/chat/${chatroom._id}`}  >
+      <Link to={`/chat/${chatroom._id}`} onClick={() => dispatch({ type: ActionTypes.SET_CURRENT_CHAT, chatroom: chatroom })} >
 
-         <div key={`${chatroom._id}`} className="border-4  card bg-base-100 shadow-xl " >
-            <div className="card-body p-2">
+         <div key={`${chatroom._id}`} className="  card bg-base-100 shadow-xl border " >
+            <div className="card-body p-2 ">
+               <div className="flex flex-row items-center justify-start gap-2">
 
+                  <div className=" flex flex-col items-center ">
 
-
-               {!chatroom.lastMessage
-                  ?
-                  <div className="lastMessage border-2" >
-                     No Messages found
-                  </div>
-                  :
-
-                  <div className="lastMessage  flex items-center gap-x-2" data-message={chatroom.lastMessage._id} >
-                     <div className="flex flex-col items-center ">
-
-                        <div className="avatar-group -space-x-6">
-
-                           <div className="avatar">
-                              <div className="w-8 bg-slate-300">
-                                 {chatroom.isGroup ?
-
-                                    <img src={chatroom.lastMessage.sender.avatar} alt={`${chatroom.lastMessage.sender.avatar} avatar image`} />
-
-                                    :
-                                    <h1 className="card-title text-sm">
-                                       <>
-                                          <img src={chatroom.members.filter((user) => user._id !== Auth.getProfile()._id)[0].avatar} alt={`${chatroom.members.filter((user) => user._id !== Auth.getProfile()._id)[0].avatar} avatar image`} />
-
-                                       </>
-                                    </h1>
-
-                                 }
-                              </div>
-                           </div>
-                        </div>
-                        <p className="truncate text-xs">
+                     <div className="avatar">
+                        <div className="w-8 bg-slate-300 rounded-full">
                            {chatroom.isGroup ?
 
-
-                              chatroom.lastMessage.sender.username
+                              <div className="w-full text-center p-0 flex justify-center h-full items-center text-xs font-bold">
+                                 GM
+                              </div>
 
                               :
-                              chatroom.members.filter((user) => user._id !== Auth.getProfile()._id)[0].username
+                              <h1 className="card-title text-sm">
+                                 <>
+                                    <img src={chatroom.members.filter((user) => user._id !== Auth.getProfile()._id)[0].avatar} alt={`${chatroom.members.filter((user) => user._id !== Auth.getProfile()._id)[0].avatar} avatar image`} />
 
+                                 </>
+                              </h1>
 
                            }
-                        </p>
-                     </div>
-                     <div className="flex flex-col justify-start flex-grow">
-                        {chatroom.isGroup ?
-                           <h1 className="card-title text-sm"> {chatroom.roomName} </h1>
-
-                           :
-                           <h1 className="card-title text-sm">
-                              <>
-                                 {
-                                    chatroom.members.filter((user) => user._id !== Auth.getProfile()._id)[0].username
-                                 }
-                              </>
-                           </h1>
-
-                        }
-                        <p>
-
-                           {chatroom.lastMessage.content}
-                        </p>
+                        </div>
                      </div>
 
-                     <div className="justify-self-end">
 
-                        {dayjs(chatroom.lastMessage.updatedAt).format(" h:mm a")}
-                     </div>
                   </div>
-               }
+                  <div className="flex flex-col flex-grow overflow-hidden  ">
+                     {/* chat name */}
+                     <h1 className="card-title text-sm truncate   w-full">
+                        <>
+                           {
+                              chatroom.isGroup ?
+                                 chatroom.roomName
+                                 : chatroom.members.filter((user) => user._id !== Auth.getProfile()._id)[0].username
+                           }
+                        </>
+                     </h1>
+                     <p className="justify-self-end">
+                        {chatroom.lastMessage
+                           ?
+                           chatroom.lastMessage.content
+                           :
+                           "No Messages"}
+                     </p>
+                  </div>
+                  <div className="min-w-max justify-self-end ">
+
+                     {dayjs(chatroom.updatedAt).format(" h:mm a")}
+                  </div>
+
+               </div>
+
+
                <div className="avatar-group -space-x-6">
 
                   {

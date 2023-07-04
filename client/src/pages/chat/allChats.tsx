@@ -38,13 +38,15 @@ export default function Chat(props: IChatProps) {
       <div>
 
          <AllChatsHeader />
+         <div className="flex flex-col gap-2 pt-2  overflow-auto">
 
-         {
-            state.allChats.map((chatroom: IChatroom) => {
-               // console.log(chatroom.lastMessage?.sender)
-               return (<ChatCard chatroom={chatroom} />)
-            })
-         }
+            {
+               state.allChats.map((chatroom: IChatroom) => {
+                  // console.log(chatroom.lastMessage?.sender)
+                  return (<ChatCard chatroom={chatroom} />)
+               })
+            }
+         </div>
          {/* new chat button*/}
          {/* going to be a list of all chats */}
          {/* current chat on big screen*/}

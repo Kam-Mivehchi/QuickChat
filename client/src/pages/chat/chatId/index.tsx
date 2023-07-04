@@ -45,7 +45,7 @@ export default function SingleChat() {
 
       dispatch({ type: ActionTypes.SET_LOADING, loading: true });
       dispatch({ type: ActionTypes.SET_MESSAGES, messages: [...data] });
-      dispatch({ type: ActionTypes.SET_CURRENT_CHAT, chatroom: data[0].chatroom });
+      // dispatch({ type: ActionTypes.SET_CURRENT_CHAT, chatroom: data[0].chatroom });
       dispatch({ type: ActionTypes.SET_LOADING, loading: false });
 
       // socket.emit("join-chat", chatId);
@@ -84,8 +84,8 @@ export default function SingleChat() {
 
          socket.emit("new-message", response);
          console.log(socket)
-         dispatch({ type: ActionTypes.ADD_NEW_MESSAGE, message: response });
          setNewMessage("")
+         dispatch({ type: ActionTypes.ADD_NEW_MESSAGE, message: response });
       } catch (error) {
          dispatch({ type: ActionTypes.SET_ERROR, error: true });
       }
@@ -121,10 +121,10 @@ export default function SingleChat() {
             <ChatSettings currentChat={state.currentChat} modal={modal} />
 
             <div className="card bg-base-100 shadow-xl w-full  py-2 h-[80vh] relative">
-               <div className="absolute w-full"></div>
-               <div className="overflow-auto">
 
-                  {state.chatMessages.map((message: IMessage, i: number) => {
+               <div className="overflow-auto h-[calc(100%-2.5em)]">
+
+                  {state.chatMessages.length ? state.chatMessages.map((message: IMessage, i: number) => {
                      return (
                         <>
                            {/* line break for each day */}
@@ -139,18 +139,23 @@ export default function SingleChat() {
                            <ChatBubble message={message} key={message._id} />
                         </>
                      )
-                  })}
+                  })
+                     :
+                     <div className=" w-full h-full grid place-content-center">No messages between you </div>
+                  }
 
-                  <div className={`chat chat-start pl-10 ${isTyping ? "grid" : "hidden"}`} >
-                     <div className=" chat-bubble flex "><span className="loading loading-dots loading-xs "></span></div>
+                  <div ref={messagesEndRef}>
+                     <div className={`chat chat-start pl-10 ${isTyping ? "grid" : "hidden"}`}  >
+                        <div className=" chat-bubble flex "><span className="loading loading-dots loading-xs "></span></div>
+                     </div>
+
                   </div>
-                  <div ref={messagesEndRef}></div>
                </div>
-               <form className=" flex justify-center" onSubmit={handleSendMessage}>
+               <form className=" flex w-full fixed bottom-0 left-50  gap-1 p-2 items-end bg-accent rounded justify-center" onSubmit={handleSendMessage}>
 
-                  <input type="text" placeholder="send a message" className="input input-bordered max-w-xs " onChange={handleTyping} value={newMessage} />
+                  <input type="text" placeholder="send a message" className="input input-sm input-bordered max-w-xs flex-grow" onChange={handleTyping} value={newMessage} />
 
-                  <button type="submit" className="btn btn-primary w-16">Send</button>
+                  <button type="submit" className="btn btn-primary btn-sm w-16">Send</button>
                </form>
             </div>
             {/* Message input */}

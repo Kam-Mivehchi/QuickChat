@@ -1,11 +1,17 @@
 import React from 'react'
 import { searchForUsers, createDM } from '../utils/api'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, } from 'react-redux'
+import { ActionTypes, AppState } from "../utils/redux/reducers.tsx"
+import { AppDispatch } from "../utils/redux/store.tsx";
+
 function AllChatsHeader() {
    const [dropdown, showDropdown] = React.useState<boolean>(false)
    const [searchInput, setSearchInput] = React.useState<string>("")
    const [matchingUsers, setMatchingUsers] = React.useState<IUser[]>([])
    const [openSearch, setOpenSearch] = React.useState<boolean | null>()
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
    React.useEffect(() => {
 
       (async () => {
@@ -37,14 +43,17 @@ function AllChatsHeader() {
    async function handleNewDM(userId: string) {
       try {
          let newDM = await createDM(userId)
-
+         dispatch({ type: ActionTypes.ADD_TO_ALL_CHATS, chatroom: newDM });
+         dispatch({ type: ActionTypes.SET_CURRENT_CHAT, chatroom: newDM });
          console.log(newDM)
+         navigate(`/chat/${newDM._id}`);
+         setOpenSearch(false)
       } catch (error) {
          console.error(error)
       }
    }
    return (
-      <div className="bg-base-200  relative">
+      <div className="bg-base-200  relative pb-4 pt-2 rounded">
          <h2 className="text-lg text-center font-bold">Messages</h2>
          {/* user search input goes here */}
          <span className="rounded-none w-full flex items-center relative" onClick={getUsers}>
@@ -55,7 +64,7 @@ function AllChatsHeader() {
          {/* dropdown */}
 
          <div className={`relative transition-transform duration-200 ease-in ${openSearch ? "translate-x-0" : "translate-x-full"} z-40`}>
-            <div className="bg-base-200 w-full  h-10 py-1" onClick={() => setOpenSearch(false)}>
+            <div className={`bg-base-200 w-full  h-10 py-1 ${openSearch ? "block" : "hidden"}`} onClick={() => setOpenSearch(false)}>
 
                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className='absolute right-4 top-2 btn btn-primary btn-xs'><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" /></svg>
             </div>
