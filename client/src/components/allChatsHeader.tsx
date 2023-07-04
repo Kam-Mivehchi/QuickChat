@@ -53,7 +53,7 @@ function AllChatsHeader() {
       }
    }
    return (
-      <div className="bg-base-200  relative pb-4 pt-2 rounded">
+      <div className="bg-base-200  relative pb-4 pt-2 rounded ">
          <h2 className="text-lg text-center font-bold">Messages</h2>
          {/* user search input goes here */}
          <span className="rounded-none w-full flex items-center relative" onClick={getUsers}>

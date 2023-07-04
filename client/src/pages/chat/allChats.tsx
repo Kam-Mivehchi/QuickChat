@@ -35,7 +35,7 @@ export default function Chat(props: IChatProps) {
 
    }
    return (
-      <div>
+      <div className='overflow-hidden'>
 
          <AllChatsHeader />
          <div className="flex flex-col gap-2 pt-2  overflow-auto">
