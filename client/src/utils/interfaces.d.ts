@@ -24,7 +24,7 @@ declare global {
       _id: string;
       username: string;
       email: string;
-      password: string;
+      password?: string;
       avatar?: string;
       bio?: string;
       isCorrectPassword?(password: string): boolean;

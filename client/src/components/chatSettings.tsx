@@ -7,7 +7,7 @@ import {
 interface PropType {
    roomName: string;
    members: IUser[],
-   admin: string
+   admin: IUser
 
 }
 function ChatSettings({ currentChat, modal }: { currentChat: PropType, modal: boolean | undefined }) {
@@ -79,15 +79,15 @@ function ChatSettings({ currentChat, modal }: { currentChat: PropType, modal: bo
             </div>
             <div className=" collapse grid-cols-max grid-flow-col border-y rounded-none " tabIndex={0}>
 
-               <Link className=" flex gap-2  collapse-title text-xl font-medium" to="" key={currentChat.admin}>
+               <Link className=" flex gap-2  collapse-title text-xl font-medium" to="" key={currentChat.admin._id}>
                   <div className="avatar">
                      <div className="w-8 bg-slate-300 rounded-full ">
-                        <img src={currentChat.admin} alt={`${currentChat.admin} avatar image`} />
+                        <img src={currentChat.admin.avatar} alt={`${currentChat.admin.username} avatar image`} />
                      </div>
                   </div>
                   <h1 className="card-title flex-grow">
 
-                     {currentChat.admin}
+                     {currentChat.admin.username}
                   </h1>
 
                </Link>
@@ -105,7 +105,7 @@ function ChatSettings({ currentChat, modal }: { currentChat: PropType, modal: bo
                      Profile
                   </Link>
                   <button className="btn  btn-error btn-sm flex-grow">
-                     Remove Member
+                     Change Admin
                   </button>
                </div>
 

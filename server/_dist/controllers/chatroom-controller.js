@@ -23,10 +23,11 @@ function getSingleChat(req, res) {
             let chat = yield models_1.Chatroom.find({
                 $and: [
                     { members: { $elemMatch: { $eq: req.user._id } } },
-                    { members: { $elemMatch: { $eq: members } } },
+                    { members: { $elemMatch: { $eq: members[0] } } },
                 ],
             })
                 .populate("members", "-password")
+                .populate("admin", "-password")
                 .populate("lastMessage");
             if (!chat.length) {
                 return createChat(req, res);
@@ -133,6 +134,7 @@ function getChatById(req, res) {
         try {
             const chat = yield models_1.Chatroom.findOne({ _id: req.params.chatId })
                 .populate("members", "-password")
+                .populate("admin", "-password")
                 .populate("lastMessage")
                 .select("-__v");
             res.json(chat);
@@ -174,10 +176,13 @@ function allMessages(req, res) {
                 .populate("sender", "username avatar email _id")
                 .populate({
                 path: "chatroom",
-                populate: {
-                    path: "members",
-                    model: "User"
-                }
+                populate: [{
+                        path: "members",
+                        model: "User"
+                    }, {
+                        path: "admin",
+                        model: "User"
+                    }]
             }).select("-__v");
             res.json(getMessage);
         }

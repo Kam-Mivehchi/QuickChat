@@ -6,7 +6,7 @@ const router = Router();
 
 //creates a new chat
 router.route('/').post(createChat)
-router.route('/view').post(getSingleChat)
+router.route('/dm').post(getSingleChat)
 //gets chat data or deletes the room entirely as admin
 router.route('/:chatId').get(getChatById).delete(deleteChat).post(sendMessage)
 

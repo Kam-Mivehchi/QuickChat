@@ -61,8 +61,10 @@ export async function register(userData: INewUser): Promise<authResponse> {
    return data;
 }
 
-export async function searchForUsers() {
-
+export async function searchForUsers(input: string) {
+   const response = await api.post(`/users/`, { input: input });
+   const data = response.data as unknown as IUser[]
+   return data;
 }
 
 export async function updateUser({ params, body }: { params: IUserQueryParam, body: IUpdateUserBody }): Promise<IUser> {
@@ -84,8 +86,14 @@ export async function updatePassword({ params, newPassword }: { params: IUserQue
 }
 
 // CHAT ROUTES
-export async function createChat({ members }: { members: string[] }): Promise<IChatroom> {
+export async function createGroupChat({ members }: { members: string[] }): Promise<IChatroom> {
    const response = await api.post(`/chat/`, { members: members });
+   const data = response.data as unknown as IChatroom
+   return data;
+}
+// CHAT ROUTES
+export async function createDM(member: string): Promise<IChatroom> {
+   const response = await api.post(`/chat/dm`, { members: [member] });
    const data = response.data as unknown as IChatroom
    return data;
 }
@@ -93,6 +101,12 @@ export async function createChat({ members }: { members: string[] }): Promise<IC
 export async function getAllChats(): Promise<IChatroom[]> {
    const response = await api.get("/users/chats");
    const data = response.data as unknown as IChatroom[]
+   return data;
+
+}
+export async function getSingleChat(chatId: string): Promise<IChatroom> {
+   const response = await api.get(`/chats/${chatId}`);
+   const data = response.data as unknown as IChatroom
    return data;
 
 }

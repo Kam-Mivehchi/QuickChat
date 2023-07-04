@@ -16,7 +16,13 @@ const initialState: AppState = {
       roomName: "",
       members: [],
       lastMessage: "",
-      admin: "",
+      admin: {
+         _id: "",
+         username: "",
+         email: "",
+         avatar: "",
+         bio: "",
+      },
       isGroup: false,
       updatedAt: "",
       createdAt: "",
@@ -32,7 +38,7 @@ interface IChatroomResponse {
    roomName: string;
    members: IUser[];
    lastMessage: string;
-   admin: string;
+   admin: IUser;
    isGroup: boolean;
    updatedAt: string;
    createdAt: string;

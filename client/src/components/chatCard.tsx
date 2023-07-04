@@ -5,9 +5,12 @@ import {
 import dayjs from "dayjs"
 import Auth from "../utils/auth"
 
+
+
 function ChatCard({ chatroom }: { chatroom: IChatroom }) {
+
    return (
-      <Link to={`/chat/${chatroom._id}`} >
+      <Link to={`/chat/${chatroom._id}`}  >
 
          <div key={`${chatroom._id}`} className="border-4  card bg-base-100 shadow-xl " >
             <div className="card-body p-2">
@@ -113,7 +116,7 @@ function ChatCard({ chatroom }: { chatroom: IChatroom }) {
 
             </div>
          </div>
-      </Link>
+      </Link >
    )
 }
 
