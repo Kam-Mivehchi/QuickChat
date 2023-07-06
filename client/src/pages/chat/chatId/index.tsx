@@ -45,12 +45,18 @@ export default function SingleChat() {
 
       dispatch({ type: ActionTypes.SET_LOADING, loading: true });
       dispatch({ type: ActionTypes.SET_MESSAGES, messages: [...data] });
-      // dispatch({ type: ActionTypes.SET_CURRENT_CHAT, chatroom: data[0].chatroom });
+      if (data[0]) {
+
+         dispatch({ type: ActionTypes.SET_CURRENT_CHAT, chatroom: data[0].chatroom });
+      }
+      dispatch({ type: ActionTypes.REMOVE_FROM_UNREAD, chatroom: data[0].chatroom });
+
       dispatch({ type: ActionTypes.SET_LOADING, loading: false });
 
       // socket.emit("join-chat", chatId);
 
       return (): void => {
+         dispatch({ type: ActionTypes.SET_CURRENT_CHAT, chatroom: {} })
          dispatch({ type: ActionTypes.SET_MESSAGES, messages: [] })
          dispatch({ type: ActionTypes.SET_ERROR, error: false });
 
@@ -60,19 +66,22 @@ export default function SingleChat() {
 
    React.useEffect(() => {
       socket.on("message-received", (newMessageReceived: IMessage) => {
-         console.log({ newMessageReceived })
+         console.log(newMessageReceived)
+         console.log(state.currentChat._id)
          if (
-            chatId !== newMessageReceived.chatroom._id
+            Object.keys(state.currentChat).length || state.currentChat._id === newMessageReceived.chatroom._id
          ) {
             // notification
-            if (!state.unread.includes(newMessageReceived)) {
-               // setUnread([newMessageReceived, ...notification]);
-               dispatch({ type: ActionTypes.ADD_TO_UNREAD, message: newMessageReceived });
-            }
+            console.log(state.currentChat, newMessageReceived.chatroom._id)
+            dispatch({ type: ActionTypes.ADD_TO_UNREAD, message: newMessageReceived });
+
          } else {
             dispatch({ type: ActionTypes.ADD_NEW_MESSAGE, message: newMessageReceived });
 
+
          }
+
+
       });
    });
    async function handleSendMessage(event: React.FormEvent<HTMLFormElement>) {
@@ -126,18 +135,20 @@ export default function SingleChat() {
 
                   {state.chatMessages.length ? state.chatMessages.map((message: IMessage, i: number) => {
                      return (
-                        <>
+                        <div key={message._id}>
                            {/* line break for each day */}
-                           {dayjs(message.createdAt).format("MMM D") !== dayjs(state.chatMessages[i ? i - 1 : 0].createdAt).format("MMM D") ?
-                              <div className="flex flex-col w-full border-opacity-50 p-5">
-                                 <div className="divider">{dayjs(message.createdAt).format("MMM D")}</div>
-                              </div>
-                              :
-                              null}
+                           {
+                              dayjs(message.createdAt).format("MMM D") !== dayjs(state.chatMessages[i ? i - 1 : 0].createdAt).format("MMM D") ?
+                                 <div className="flex flex-col w-full border-opacity-50 p-5">
+                                    <div className="divider">{dayjs(message.createdAt).format("MMM D")}</div>
+                                 </div>
+                                 :
+                                 null
+                           }
 
 
-                           <ChatBubble message={message} key={message._id} />
-                        </>
+                           <ChatBubble message={message} />
+                        </div>
                      )
                   })
                      :

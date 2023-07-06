@@ -56,12 +56,12 @@ const appReducer: Reducer<AppState, AppAction> = (state = initialState, action) 
       case ActionTypes.ADD_TO_UNREAD:
          return {
             ...state,
-            message: [...state.unread, action.message],
+            unread: [...state.unread, action.message],
          };
       case ActionTypes.REMOVE_FROM_UNREAD:
          return {
             ...state,
-            message: state.unread.filter((message) => message._id !== action.message._id),
+            unread: state.unread.filter((message) => message.chatroom._id !== action.chatroom._id)
          };
       case ActionTypes.SET_CURRENT_CHAT:
          return {
@@ -170,7 +170,7 @@ interface AddUnreadAction {
    type: ActionTypes.ADD_TO_UNREAD;
 }
 interface RemoveUnreadAction {
-   message: IMessage;
+   chatroom: IChatroom;
    type: ActionTypes.REMOVE_FROM_UNREAD;
 }
 interface CurrentChatAction {

@@ -3,7 +3,7 @@ import * as React from 'react';
 export interface IAuthenticationProps {
 }
 
-export default function Register(props: IAuthenticationProps) {
+export default function Register() {
    return (
       <div>
          Register

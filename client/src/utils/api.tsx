@@ -61,14 +61,19 @@ export async function register(userData: INewUser): Promise<authResponse> {
    return data;
 }
 
-export async function searchForUsers(input: string) {
+export async function searchForUsers(input: string): Promise<IUser[]> {
    const response = await api.post(`/users/`, { input: input });
    const data = response.data as unknown as IUser[]
    return data;
 }
+export async function getSingleUser({ params }: { params: IUserQueryParam }): Promise<IUser> {
+   const response = await api.get(`/users/${params.userId}`);
+   const data = response.data as unknown as IUser
+   return data;
+}
 
-export async function updateUser({ params, body }: { params: IUserQueryParam, body: IUpdateUserBody }): Promise<IUser> {
-   const response = await api.put(`/users/${params.userId}`, body);
+export async function updateUser(params: string, body: IUpdateUserBody): Promise<IUser> {
+   const response = await api.put(`/users/${params}`, body);
    const data = response.data as unknown as IUser
    return data;
 }

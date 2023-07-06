@@ -8,10 +8,9 @@ import { useSelector, useDispatch, } from 'react-redux'
 import { ActionTypes, AppState } from "../utils/redux/reducers.tsx"
 import { AppDispatch } from "../utils/redux/store.tsx";
 
-export default function Login(props: IAuthenticationProps) {
+export default function Login() {
    const [formState, setFormState] = react.useState({ email: '', password: '' });
-   const [error, setError] = react.useState(false)
-   const [loading, setLoading] = react.useState(false)
+
    const dispatch = useDispatch<AppDispatch>()
    const state = useSelector(state => state) as AppState
 
@@ -31,7 +30,7 @@ export default function Login(props: IAuthenticationProps) {
          dispatch({ type: ActionTypes.SET_LOADING, loading: false });
 
       } catch (e) {
-         console.log(e);
+
          dispatch({ type: ActionTypes.SET_ERROR, error: !!e });
          dispatch({ type: ActionTypes.SET_LOADING, loading: false });
 
@@ -79,13 +78,13 @@ export default function Login(props: IAuthenticationProps) {
                   <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
                </label>
             </div>
-            {error ? (
+            {state.isError ? (
                <div>
                   <p className="text-error">The provided credentials are incorrect</p>
                </div>
             ) : null}
             <div className="form-control mt-6">
-               <button className="btn btn-primary" type="submit">{loading ? <span className="loading loading-dots loading-md animate-pulse"></span>
+               <button className="btn btn-primary" type="submit">{state.isLoading ? <span className="loading loading-dots loading-md animate-pulse"></span>
                   : "Login"}</button>
             </div>
          </div>

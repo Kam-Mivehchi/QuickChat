@@ -1,19 +1,31 @@
 import React from 'react'
 import {
    Link,
+   useNavigate
 } from "react-router-dom";
 import dayjs from "dayjs"
 import Auth from "../utils/auth"
-import { useSelector, useDispatch, } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { ActionTypes, AppState } from "../utils/redux/reducers.tsx"
 import { AppDispatch } from "../utils/redux/store.tsx";
 
 
+
 function ChatCard({ chatroom }: { chatroom: IChatroom }) {
    const dispatch = useDispatch<AppDispatch>()
+   const state = useSelector(state => state) as AppState
+   const navigate = useNavigate()
+   function handleChatClick() {
+      dispatch({ type: ActionTypes.SET_CURRENT_CHAT, chatroom: chatroom })
+      dispatch({ type: ActionTypes.REMOVE_FROM_UNREAD, chatroom: chatroom })
+      navigate(`/chat/${chatroom._id}`)
+   }
 
+   const unreadMessages = state.unread.filter((message: IMessage) => {
+      message.chatroom._id === chatroom._id
+   })
    return (
-      <Link to={`/chat/${chatroom._id}`} onClick={() => dispatch({ type: ActionTypes.SET_CURRENT_CHAT, chatroom: chatroom })} >
+      <a onClick={handleChatClick} >
 
          <div key={`${chatroom._id}`} className="  card bg-base-100 shadow-xl border " >
             <div className="card-body p-2 ">
@@ -55,13 +67,24 @@ function ChatCard({ chatroom }: { chatroom: IChatroom }) {
                         </>
                      </h1>
                      <p className="justify-self-end">
-                        {chatroom.lastMessage
-                           ?
-                           chatroom.lastMessage.content
-                           :
-                           "No Messages"}
+                        <div className="indicator">
+                           {unreadMessages.length ? <span className="indicator-item badge badge-secondary"></span> : null}
+                           {chatroom.lastMessage
+                              ?
+                              <div className="grid  place-items-center">{chatroom.lastMessage.content}</div>
+
+
+
+
+
+
+                              :
+                              "No Messages"}
+                        </div>
+
                      </p>
                   </div>
+
                   <div className="min-w-max justify-self-end ">
 
                      {dayjs(chatroom.updatedAt).format(" h:mm a")}
@@ -100,7 +123,7 @@ function ChatCard({ chatroom }: { chatroom: IChatroom }) {
 
             </div>
          </div>
-      </Link >
+      </a >
    )
 }
 
