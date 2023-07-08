@@ -82,13 +82,13 @@ function UserSearchBar({ page }: { page: string }) {
          </span>
          {/* dropdown */}
 
-         <div className={`relative transition-transform duration-200 ease-in ${openSearch ? "translate-x-0" : "translate-x-[100vw]"} z-40`}>
+         <div className={`relative transition-transform duration-200 ease-in ${openSearch ? "translate-x-0" : "translate-x-[100vw]"} z-40 `}>
             <div className={`bg-base-200 w-full  h-10 py-1 ${openSearch ? "block" : "hidden"}`} onClick={() => setOpenSearch(false)}>
 
                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className='absolute right-4 top-2 btn btn-primary btn-xs'><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" /></svg>
             </div>
             <div className="options overflow-auto max-h-[50vh] absolute z-40 bg-base-200 w-full card  rounded-t-none
-            justify-center items-between pt-8">
+            justify-center items-between pt-8 lg:pt-24">
 
 
                {matchingUsers.length ?

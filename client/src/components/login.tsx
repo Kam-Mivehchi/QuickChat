@@ -1,5 +1,5 @@
 import * as react from 'react';
-import axios from 'axios';
+
 import { login } from '../utils/api';
 import Auth from '../utils/auth';
 export interface IAuthenticationProps {
@@ -28,6 +28,7 @@ export default function Login() {
 
          dispatch({ type: ActionTypes.SET_CURRENT_USER, user: user });
          dispatch({ type: ActionTypes.SET_LOADING, loading: false });
+
 
       } catch (e) {
 

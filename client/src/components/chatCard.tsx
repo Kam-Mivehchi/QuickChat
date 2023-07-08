@@ -8,28 +8,34 @@ import Auth from "../utils/auth"
 import { useDispatch, useSelector } from 'react-redux'
 import { ActionTypes, AppState } from "../utils/redux/reducers.tsx"
 import { AppDispatch } from "../utils/redux/store.tsx";
-
+let unreadMessages = [];
 
 
 function ChatCard({ chatroom }: { chatroom: IChatroom }) {
    const dispatch = useDispatch<AppDispatch>()
    const state = useSelector(state => state) as AppState
    const navigate = useNavigate()
+
+
    function handleChatClick() {
       dispatch({ type: ActionTypes.SET_CURRENT_CHAT, chatroom: chatroom })
       dispatch({ type: ActionTypes.REMOVE_FROM_UNREAD, chatroom: chatroom })
       navigate(`/chat/${chatroom._id}`)
    }
 
-   const unreadMessages = state.unread.filter((message: IMessage) => {
-      message.chatroom._id === chatroom._id
-   })
+
    return (
       <a onClick={handleChatClick} >
 
          <div key={`${chatroom._id}`} className="  card bg-base-100 shadow-xl border " >
-            <div className="card-body p-2 ">
+            <div className="card-body p-2 relative">
                <div className="flex flex-row items-center justify-start gap-2">
+
+                  <span className={`badge badge-primary badge-xs h-3 ${state.unread.filter((message: IMessage) => {
+                     console.log(message.chatroom._id, chatroom._id)
+                     return message.chatroom._id == chatroom._id
+                  }).length ? "visible" : "invisible"}`}>
+                  </span>
 
                   <div className=" flex flex-col items-center ">
 
@@ -67,20 +73,14 @@ function ChatCard({ chatroom }: { chatroom: IChatroom }) {
                         </>
                      </h1>
                      <p className="justify-self-end">
-                        <div className="indicator">
-                           {unreadMessages.length ? <span className="indicator-item badge badge-secondary"></span> : null}
-                           {chatroom.lastMessage
-                              ?
-                              <div className="grid  place-items-center">{chatroom.lastMessage.content}</div>
 
+                        {/* {state.unread.length ? <span className="indicator-item badge badge-secondary">new</span> : null} */}
+                        {chatroom.lastMessage
+                           ?
+                           chatroom.lastMessage.content
+                           :
+                           "No Messages"}
 
-
-
-
-
-                              :
-                              "No Messages"}
-                        </div>
 
                      </p>
                   </div>
@@ -93,7 +93,7 @@ function ChatCard({ chatroom }: { chatroom: IChatroom }) {
                </div>
 
 
-               <div className="avatar-group -space-x-6">
+               <div className="avatar-group -space-x-6 pl-2 overflow-x-scroll">
 
                   {
                      chatroom.members.length > 2 ?

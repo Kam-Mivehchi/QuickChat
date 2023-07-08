@@ -1,4 +1,4 @@
-import React from 'react'
+
 import Auth from '../utils/auth'
 import dayjs from 'dayjs';
 
@@ -14,7 +14,7 @@ function ChatBubble({ message }: { message: IMessage }) {
          <div className="chat-header ">
             {message.sender.username}
          </div>
-         <div className="chat-bubble">{message.content}</div>
+         <div className="chat-bubble break-words">{message.content}</div>
          <div className="chat-footer opacity-50 flex  items-center gap-2">
             Delivered
             <time className={`text-xs opacity-50`}>{dayjs(message.createdAt).format("h:mm a")

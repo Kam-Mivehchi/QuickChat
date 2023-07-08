@@ -10,10 +10,9 @@ import { useDispatch, } from 'react-redux'
 
 import Auth from "../../utils/auth";
 
-export interface IProfileProps {
-}
 
-export default function Profile(props: IProfileProps) {
+
+export default function Profile() {
    const { userId } = useParams()
    const data = useLoaderData() as IUser;
    const dispatch = useDispatch()
@@ -66,7 +65,8 @@ export default function Profile(props: IProfileProps) {
                   </>
                   : bio}</div>
 
-               <button className="btn btn-primary w-full" onClick={handleNewDM}>Send Message</button>
+
+               <button className={`btn btn-primary w-full ${Auth.getProfile()._id === userId ? "hidden" : "inline-flex"}`} onClick={handleNewDM}>Send Message</button>
             </div>
          </div>
 

@@ -1,24 +1,17 @@
-import * as React from 'react';
-import {
 
-   useLoaderData,
-   Link,
+import {
    Outlet
 } from "react-router-dom";
 
-export interface IChatProps {
-}
-//use data loaders https://reactrouter.com/en/main/start/tutorial
 
-export default function ChatDash(props: IChatProps) {
+export default function ChatDash() {
 
    return (
+      <div className="max-w-xl mx-auto bg-base-100 ">
 
-      <Outlet />
-      // {/* new chat button*/ }
-      // {/* going to be a list of all chats */ }
-      // {/* current chat on big screen*/ }
-      // {/* current chat is its own page on small screen*/ }
+         <Outlet />
+      </div>
+
 
 
    );
