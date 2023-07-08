@@ -10,6 +10,7 @@ function Navbar() {
    const [avatar, setAvatar] = React.useState<string>("")
    React.useEffect(() => {
       async function getUser() {
+         if (!Auth.loggedIn()) return
          try {
             let user = await getSingleUser({ params: { userId: Auth.getProfile()._id } })
             setAvatar(user.avatar as string)
@@ -38,9 +39,9 @@ function Navbar() {
 
                   </ul>
                </div>
-               <a className="btn btn-ghost normal-case text-xl">QuickChat</a>
+               <Link to={`/chat`} className="btn btn-ghost normal-case text-xl">QuickChat</Link>
             </div>
-            <div className="navbar-center hidden lg:flex">
+            <div className={` hidden lg:flex ${Auth.loggedIn() ? "navbar-center" : "navbar-end"}`}>
                <ul className="menu menu-horizontal px-1">
                   <li className="indicator">
                      <span className={`indicator-item badge badge-secondary pt-0 ${state.unread.length ? "absolute" : "hidden"}`}>{state.unread.length}</span>
@@ -48,8 +49,8 @@ function Navbar() {
                   </li>
                </ul>
             </div>
-            <div className="navbar-end flex gap-2">
-               <Link className="avatar" to={`user/${Auth.getProfile()._id}`}>
+            <div className={`navbar-end flex gap-2 ${Auth.loggedIn() ? "flex" : "hidden"}`}>
+               <Link className={`${Auth.loggedIn() ? "avatar" : "hidden"} `} to={`${Auth.loggedIn() ? `user/${Auth.getProfile()._id}` : "/"}`}>
                   <div className="w-12 rounded-full border-2 shadow-lg border-primary">
 
 

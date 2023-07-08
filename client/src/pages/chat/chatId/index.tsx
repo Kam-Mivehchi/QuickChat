@@ -47,10 +47,13 @@ export default function SingleChat() {
       dispatch({ type: ActionTypes.SET_LOADING, loading: true });
       dispatch({ type: ActionTypes.SET_MESSAGES, messages: [...data] });
       if (data[0] && !state.currentChat) {
+         dispatch({ type: ActionTypes.REMOVE_FROM_UNREAD, chatroom: data[0].chatroom });
+         if (!state.currentChat) {
 
-         dispatch({ type: ActionTypes.SET_CURRENT_CHAT, chatroom: data[0].chatroom });
+            dispatch({ type: ActionTypes.SET_CURRENT_CHAT, chatroom: data[0].chatroom });
+         }
       }
-      dispatch({ type: ActionTypes.REMOVE_FROM_UNREAD, chatroom: data[0].chatroom });
+
 
       dispatch({ type: ActionTypes.SET_LOADING, loading: false });
 

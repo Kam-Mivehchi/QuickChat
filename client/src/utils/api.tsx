@@ -41,7 +41,13 @@ const api = axios.create({
       Authorization: 'Bearer ' + Auth.getToken()
    }
 });
-
+axios.interceptors.response.use(
+   response => response,
+   error => {
+      if (error.response.status === 401) {
+         window.location.href = '/';
+      }
+   });
 // USER ROUTES
 export async function sendMessage(body: INewMessage) {
    const response = await api.post(`/chat/${body.chatroom}`, body);
@@ -118,6 +124,7 @@ export async function getSingleChat(chatId: string): Promise<IChatroom> {
 
 export async function getAllMessages({ params }: { params: IChatroomQueryParam }): Promise<IMessage[]> {
    const response = await api.get(`/chat/${params.chatId}/messages`);
+
    const data = response.data as unknown as IMessage[]
    return data;
 }
