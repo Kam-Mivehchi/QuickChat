@@ -1,6 +1,5 @@
-import React from 'react'
+
 import {
-   Link,
    useNavigate
 } from "react-router-dom";
 import dayjs from "dayjs"
@@ -8,7 +7,7 @@ import Auth from "../utils/auth"
 import { useDispatch, useSelector } from 'react-redux'
 import { ActionTypes, AppState } from "../utils/redux/reducers.tsx"
 import { AppDispatch } from "../utils/redux/store.tsx";
-let unreadMessages = [];
+
 
 
 function ChatCard({ chatroom }: { chatroom: IChatroom }) {
@@ -32,7 +31,7 @@ function ChatCard({ chatroom }: { chatroom: IChatroom }) {
                <div className="flex flex-row items-center justify-start gap-2">
 
                   <span className={`badge badge-primary badge-xs h-3 ${state.unread.filter((message: IMessage) => {
-                     console.log(message.chatroom._id, chatroom._id)
+
                      return message.chatroom._id == chatroom._id
                   }).length ? "visible" : "invisible"}`}>
                   </span>
@@ -40,7 +39,7 @@ function ChatCard({ chatroom }: { chatroom: IChatroom }) {
                   <div className=" flex flex-col items-center ">
 
                      <div className="avatar">
-                        <div className="w-8 bg-slate-300 rounded-full">
+                        <div className="w-8 bg-primary rounded-full">
                            {chatroom.isGroup ?
 
                               <div className="w-full text-center p-0 flex justify-center h-full items-center text-xs font-bold">

@@ -1,19 +1,18 @@
-import * as React from 'react';
-import { Outlet, Link, useNavigation } from "react-router-dom";
-import Auth from '../utils/auth';
+
+import { Outlet } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "../utils/redux/store";
 import Navbar from '../components/navbar'
-import { useEffect } from "react";
+
 
 export default function Layout() {
-   const navigation = useNavigation();
+
 
    return (
       <>
          <Provider store={store}>
 
-            <div id="main">
+            <div id="main" className={`bg-customGradient animate-gradientFlow bg-[size:400%_400%] pt-2 min-h-screen`}>
                <header>
                   <Navbar />
 
@@ -21,10 +20,9 @@ export default function Layout() {
 
                <main
 
-                  className={
-                     navigation.state === "loading" ? "loading" : ""
-                  }
+                  className={`mt-2 `}
                >
+
                   <Outlet />
                </main>
 

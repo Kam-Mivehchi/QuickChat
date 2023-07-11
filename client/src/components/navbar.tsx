@@ -4,6 +4,8 @@ import Auth from '../utils/auth';
 import { useSelector } from 'react-redux'
 import { AppState } from '../utils/redux/reducers'
 import { getSingleUser } from '../utils/api';
+import { FaInbox, FaSignOutAlt } from "react-icons/fa";
+import { BsFillChatRightQuoteFill } from "react-icons/bs";
 function Navbar() {
    const state = useSelector(state => state) as AppState;
 
@@ -23,7 +25,7 @@ function Navbar() {
    }, [])
    return (
       <>
-         <nav className="navbar bg-base-100 max-w-6xl mx-auto">
+         <nav className="navbar  max-w-6xl mx-auto bg-base-100 px-4 rounded-full ">
             <div className="navbar-start">
                <div className="dropdown ">
                   <label tabIndex={0} className="btn btn-ghost lg:hidden indicator btn-sm p-0 w-">
@@ -35,29 +37,37 @@ function Navbar() {
 
                      <span className={`indicator-item  badge badge-primary badge-xs pt-0 ${state.unread.length ? "absolute" : "hidden"}`}>{state.unread.length}</span>
 
-                     <Link to={`/chat`}>Inbox</Link>
-
+                     <Link to={`/chat`} className="flex gap-2 items-center font-bold">
+                        <FaInbox />
+                        Inbox</Link>
                   </ul>
                </div>
-               <Link to={`/chat`} className="btn btn-ghost normal-case text-xl">QuickChat</Link>
+               <Link to={`/chat`} className="btn btn-ghost normal-case text-xl flex items-center text-primary">
+                  <BsFillChatRightQuoteFill size=".75em" className="fill-primary-focus" />
+                  QuickChat</Link>
             </div>
             <div className={` hidden lg:flex ${Auth.loggedIn() ? "navbar-center" : "navbar-end"}`}>
                <ul className="menu menu-horizontal px-1">
                   <li className="indicator">
                      <span className={`indicator-item badge badge-secondary pt-0 ${state.unread.length ? "absolute" : "hidden"}`}>{state.unread.length}</span>
-                     <Link to={`/chat`} className="font-bold text-xl btn btn-primary">Inbox</Link>
+                     <Link to={`/chat`} className="font-bold text-xl btn btn-primary btn-sm items-center hover:bg-primary-focus flex py-0">
+
+                        <FaInbox />
+                        Inbox
+                     </Link>
+
                   </li>
                </ul>
             </div>
             <div className={`navbar-end flex gap-2 ${Auth.loggedIn() ? "flex" : "hidden"}`}>
                <Link className={`${Auth.loggedIn() ? "avatar" : "hidden"} `} to={`${Auth.loggedIn() ? `user/${Auth.getProfile()._id}` : "/"}`}>
                   <div className="w-12 rounded-full border-2 shadow-lg border-primary">
-
-
                      <img src={avatar} alt="asdfsd" className={`${Auth.loggedIn() ? "inline-block" : "hidden"}`} />
                   </div>
                </Link>
-               <button className={`btn btn-xs btn-error ${Auth.loggedIn() ? "inline-block" : "hidden"}`} onClick={() => Auth.logout()}>Sign Out</button>
+               <button className={`btn btn-xs btn-error flex items-center ${Auth.loggedIn() ? "inline-block" : "hidden"}`} onClick={() => Auth.logout()}>
+                  <FaSignOutAlt />
+                  Sign Out</button>
             </div>
          </nav>
          <Toast />

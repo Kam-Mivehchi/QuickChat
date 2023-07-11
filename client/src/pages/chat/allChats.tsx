@@ -81,10 +81,10 @@ export default function Chat() {
 
 
    return (
-      <div className='overflow-hidden  '>
+      <div className='rounded-xl  '>
 
          <AllChatsHeader />
-         <div className="flex flex-col gap-2 pt-2  overflow-auto lg:px-2 min-h-[75vh]">
+         <div className="flex flex-col gap-2 pt-2  overflow-auto lg:px-2 min-h-[75vh] ">
 
             {
                state.allChats.map((chatroom: IChatroom) => {

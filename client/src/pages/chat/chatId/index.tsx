@@ -122,13 +122,13 @@ export default function SingleChat() {
          {/* chat header */}
          <SingleChatHeader currentChat={state.currentChat} setModal={setModal} />
          {/* chatbox container */}
-         < div className="  bg-base-200 relative overflow-hidden rounded-xl" >
+         < div className="  bg-base-200 relative overflow-hidden  rounded-none" >
             {/* settings */}
             <ChatSettings currentChat={state.currentChat} modal={modal} />
 
-            <div className="card bg-base-100 shadow-xl w-full  py-2 h-[80vh] relative rounded-t-none">
+            <div className="card bg-base-100 shadow-xl w-full  py-2 h-[80vh] relative ">
 
-               <div className="overflow-auto h-[calc(100%-2.5em)]">
+               <div className="overflow-auto h-[calc(100%-2.5em)] ">
 
                   {state.chatMessages.length ? state.chatMessages.map((message: IMessage, i: number) => {
                      return (
@@ -159,7 +159,7 @@ export default function SingleChat() {
 
                   </div>
                </div>
-               <form className=" flex w-full absolute bottom-0 left-50  gap-1 p-2 items-end bg-accent rounded justify-center" onSubmit={handleSendMessage}>
+               <form className=" flex w-full absolute bottom-0 left-50  gap-1 p-2 items-end  rounded justify-center bg-neutral" onSubmit={handleSendMessage}>
 
                   <input type="text" placeholder="send a message" className="input input-sm input-bordered max-w-xs flex-grow" onChange={handleTyping} value={newMessage} />
 
