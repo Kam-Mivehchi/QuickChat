@@ -8,7 +8,7 @@
     "test:server": "cd server && npm run test",
     "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\"",
     "install": "cd server && npm i && cd ../client && npm i",
-    "build": "concurrently \"cd client && npm run build \" \"cd server && npm run build\"",
+    "build": "cd client && npm run build ",
     "seed": "cd server && npm run seed"
   },
   "repository": {
