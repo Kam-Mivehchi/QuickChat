@@ -71,14 +71,24 @@ describe('User Routes', () => {
          token = response.body.token
          userId = response.body.user._id
       });
-      it('getUsers', async () => {
+      it('get all Users with no input', async () => {
          const response = await request
-            .get('/api/users').set("Authorization", "Bearer " + token)
+            .post('/api/users').send({ input: "" }).set("Authorization", "Bearer " + token)
          // allUsers.res.should.have.lengthOf.at.least(1);
          expect(response.status).to.equal(200);
 
          expect(response.body).to.be.an('array');
-         // expect(response.body).to.have.lengthOf.at.least(1);
+         expect(response.body).to.have.lengthOf.at.least(1);
+      });
+      it('get all Users with input', async () => {
+         const response = await request
+            .post('/api/users').send({ input: "dav" }).set("Authorization", "Bearer " + token)
+         // allUsers.res.should.have.lengthOf.at.least(1);
+         expect(response.status).to.equal(200);
+         console.log(response.body)
+
+         expect(response.body).to.be.an('array');
+         expect(response.body).to.have.lengthOf.at.least(1);
       });
 
       it("getMe", async () => {

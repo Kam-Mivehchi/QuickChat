@@ -11,7 +11,7 @@ interface PropType {
 }
 function SingleChatHeader({ currentChat, setModal }: { currentChat: PropType, setModal: React.Dispatch<React.SetStateAction<boolean | undefined>> }) {
    return (
-      <div className=" bg-base-200 flex items-center justify-between relative px-2">
+      <div className=" bg-base-200 flex items-center justify-between relative px-2 rounded-xl rounded-b-none">
          {/* back to chats */}
          <Link to="/chat" className="btn p-0"> &lt; Back</Link>
          {/* Name of group and members component */}
@@ -23,7 +23,7 @@ function SingleChatHeader({ currentChat, setModal }: { currentChat: PropType, se
                   if (i > 2) return;
 
                   return (
-                     <Link className="flex flex-col items-center justify-center " to="">
+                     <div className="flex flex-col items-center justify-center " key={member._id}>
 
                         <div className="avatar online border-black border  ">
                            <div className="w-10 rounded-full  bg-slate-300 ">
@@ -34,7 +34,7 @@ function SingleChatHeader({ currentChat, setModal }: { currentChat: PropType, se
                         <div className={`w-14 truncate p-1 ${i === 0 ? "visible" : "invisible"}`}>
                            {member.username}
                         </div>
-                     </Link>
+                     </div>
                   )
                })}
                {currentChat.members.length > 3 ?

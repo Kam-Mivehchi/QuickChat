@@ -17,10 +17,11 @@ export async function getSingleChat(req: Request, res: Response) {
 
          $and: [
             { members: { $elemMatch: { $eq: req.user!._id } } },
-            { members: { $elemMatch: { $eq: members } } },
+            { members: { $elemMatch: { $eq: members[0] } } },
          ],
       })
          .populate("members", "-password")
+         .populate("admin", "-password")
          .populate("lastMessage");
 
 
@@ -148,6 +149,7 @@ export async function getChatById(req: Request, res: Response) {
    try {
       const chat = await Chatroom.findOne({ _id: req.params.chatId })
          .populate("members", "-password")
+         .populate("admin", "-password")
          .populate("lastMessage")
          .select("-__v");
 
@@ -195,10 +197,13 @@ export async function allMessages(req: Request, res: Response) {
          .populate("sender", "username avatar email _id")
          .populate({
             path: "chatroom",
-            populate: {
+            populate: [{
                path: "members",
                model: "User"
-            }
+            }, {
+               path: "admin",
+               model: "User"
+            }]
          }).select("-__v");
 
       res.json(getMessage as unknown as IMessage);

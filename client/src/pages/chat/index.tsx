@@ -1,27 +1,18 @@
-import * as React from 'react';
-import {
 
-   useLoaderData,
-   Link,
+import {
    Outlet
 } from "react-router-dom";
-import { Provider } from 'react-redux'
-import store from '../../utils/redux/store'
-export interface IChatProps {
-}
-//use data loaders https://reactrouter.com/en/main/start/tutorial
 
-export default function ChatDash(props: IChatProps) {
+
+export default function ChatDash() {
 
    return (
-      <Provider store={store}>
+      <div className="max-w-xl mx-auto ">
 
-         {/* new chat button*/}
-         {/* going to be a list of all chats */}
-         {/* current chat on big screen*/}
-         {/* current chat is its own page on small screen*/}
          <Outlet />
-      </Provider>
+      </div>
+
+
 
    );
 }

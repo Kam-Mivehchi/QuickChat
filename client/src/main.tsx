@@ -9,7 +9,7 @@ import AllChats from './pages/chat/allChats'
 
 import Home from "./pages/home";
 import Profile from "./pages/profile";
-import { getAllChats, getAllMessages } from './utils/api';
+import { getAllChats, getAllMessages, getSingleUser } from './utils/api';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -51,6 +51,7 @@ const router = createBrowserRouter([
       {
         path: "user/:userId",
         element: Auth.loggedIn() ? <Profile /> : <Navigate to="/" />,
+        loader: getSingleUser,
         errorElement: <ErrorPage />,
       },
     ],
@@ -58,8 +59,8 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
+  <>
     <RouterProvider router={router} />
 
-  </React.StrictMode>,
+  </>,
 )

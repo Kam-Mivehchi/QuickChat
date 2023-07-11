@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserChats = exports.deleteUser = exports.updatePassword = exports.updateUser = exports.getMe = exports.getUsers = exports.login = exports.register = void 0;
+exports.getUserChats = exports.deleteUser = exports.updatePassword = exports.updateUser = exports.getMe = exports.searchUsers = exports.login = exports.register = void 0;
 const models_1 = require("../models");
 const auth_1 = require("../utils/auth");
 //create an account and token
@@ -49,13 +49,15 @@ function login({ body }, res) {
     });
 }
 exports.login = login;
-// get all users
-function getUsers(_req, res) {
+// search for Users
+function searchUsers(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const allUsers = yield models_1.User.find()
-                .select('-__v');
-            res.json(allUsers);
+            const { input } = req.body;
+            const matchingUsers = yield models_1.User.find({
+                username: { $regex: input, $options: "i" },
+            }).select("username avatar _id email bio");
+            res.json(matchingUsers);
         }
         catch (error) {
             console.error(error);
@@ -63,7 +65,7 @@ function getUsers(_req, res) {
         }
     });
 }
-exports.getUsers = getUsers;
+exports.searchUsers = searchUsers;
 // get single user by id
 function getMe(req, res) {
     return __awaiter(this, void 0, void 0, function* () {

@@ -44,13 +44,19 @@ export async function login({ body }: Request, res: Response) {
 
 }
 
-// get all users
-export async function getUsers(_req: Request, res: Response) {
-   try {
-      const allUsers: IUser[] = await User.find()
-         .select('-__v')
+// search for Users
+export async function searchUsers(req: Request, res: Response) {
 
-      res.json(allUsers);
+   try {
+      const { input } = req.body
+
+      const matchingUsers: IUser[] = await User.find({
+         username: { $regex: input, $options: "i" },
+      }).select("username avatar _id email bio");
+
+
+
+      res.json(matchingUsers);
 
 
    } catch (error) {
