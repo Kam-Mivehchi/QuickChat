@@ -36,7 +36,7 @@ interface IUpdateUserBody {
 }
 
 const api = axios.create({
-   baseURL: 'http://localhost:3001/api',
+   baseURL: import.meta.env.VITE_SERVER_URL,
    headers: {
       Authorization: 'Bearer ' + Auth.getToken()
    }
