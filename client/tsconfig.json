@@ -23,6 +23,9 @@
     "noFallthroughCasesInSwitch": true,
     "types": [
       "vite/client"
+    ],
+    "typeRoots": [
+      "./node_modules/@types"
     ]
   },
   "include": [
