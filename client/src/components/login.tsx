@@ -1,13 +1,10 @@
 import * as React from 'react';
-
 import { login, register } from '../utils/api';
 import Auth from '../utils/auth';
-export interface IAuthenticationProps {
-}
 import { useSelector, useDispatch, } from 'react-redux'
 import { ActionTypes, AppState } from "../utils/redux/reducers.tsx"
 import { AppDispatch } from "../utils/redux/store.tsx";
-import { setInterval } from 'timers/promises';
+
 
 export default function Login() {
    const [formState, setFormState] = React.useState({ email: '', password: '', username: '' });

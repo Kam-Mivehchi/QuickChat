@@ -1,8 +1,7 @@
 import * as React from 'react';
 import {
 
-   useLoaderData,
-   useNavigate
+   useLoaderData
 } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 import { ActionTypes, AppState } from "../../utils/redux/reducers.tsx"
@@ -23,8 +22,7 @@ export default function Chat() {
    const dispatch = useDispatch()
    const state = useSelector(state => state) as AppState
    const data = useLoaderData() as IChatroom[];
-   const [fetch, setFetch] = React.useState(false)
-   const [socketConnected, setSocketConnected] = React.useState<boolean>(false);
+
 
 
 

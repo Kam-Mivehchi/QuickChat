@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import Login from '../../components/login'
 import { TypeAnimation } from 'react-type-animation';
 
