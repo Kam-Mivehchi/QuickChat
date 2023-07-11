@@ -2,7 +2,7 @@
   "name": "messaging-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "_dist/index",
   "engines": {
     "node": "19.6.0"
   },
