@@ -23,5 +23,8 @@
   "homepage": "https://github.com/Kam-Mivehchi/QuickChat#readme",
   "dependencies": {
     "dayjs": "^1.11.9"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.6"
   }
 }
