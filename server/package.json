@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "19.6.0"
+  },
   "scripts": {
     "pretest": "npm run seed",
     "test": "mocha -r ts-node/register '**/__tests__/**/*.ts'",
@@ -10,6 +13,7 @@
     "seed": "node _dist/seeds/seed.js",
     "build": "rimraf _dist && npx tsc",
     "start": "node _dist/index.js",
+    "postinstall": "tsc",
     "predev": "npm run build",
     "dev": "concurrently \"tsc -w\" \"nodemon _dist/index.js\""
   },
