@@ -22,7 +22,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "types": [
-      "vite/client"
+      "vite/client",
+      "node"
     ],
     "typeRoots": [
       "./node_modules/@types"
