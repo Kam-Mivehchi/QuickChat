@@ -13,7 +13,6 @@
     "seed": "node _dist/seeds/seed.js",
     "build": "rimraf _dist && tsc",
     "start": "node _dist/index.js",
-    "postinstall": "npm run build",
     "predev": "npm run build",
     "dev": "concurrently \"tsc -w\" \"nodemon _dist/index.js\""
   },
