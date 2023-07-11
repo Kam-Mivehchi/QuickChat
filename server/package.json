@@ -11,7 +11,7 @@
     "test": "mocha -r ts-node/register '**/__tests__/**/*.ts'",
     "preseed": "npm run build",
     "seed": "node _dist/seeds/seed.js",
-    "build": "rimraf _dist && npx typescript",
+    "build": "rimraf _dist && typescript",
     "start": "node _dist/index.js",
     "predev": "npm run build",
     "dev": "concurrently \"tsc -w\" \"nodemon _dist/index.js\""
