@@ -93,7 +93,7 @@ function ChatCard({ chatroom }: { chatroom: IChatroom }) {
                </div>
 
 
-               <div className="avatar-group -space-x-6 pl-2 overflow-x-scroll">
+               <div className="avatar-group -space-x-6 pl-2 overflow-x-auto mx-2">
 
                   {
                      chatroom.members.length > 2 ?
