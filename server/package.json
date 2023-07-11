@@ -9,7 +9,6 @@
     "preseed": "npm run build",
     "seed": "node _dist/seeds/seed.js",
     "build": "rimraf _dist && npx tsc",
-    "prestart": "npm run build",
     "start": "node _dist/index.js",
     "predev": "npm run build",
     "dev": "concurrently \"tsc -w\" \"nodemon _dist/index.js\""
