@@ -21,7 +21,9 @@
     "url": "https://github.com/Kam-Mivehchi/QuickChat/issues"
   },
   "homepage": "https://github.com/Kam-Mivehchi/QuickChat#readme",
-  "dependencies": {},
+  "dependencies": {
+    "typescript": "^5.1.6"
+  },
   "devDependencies": {
     "concurrently": "^8.2.0"
   }
