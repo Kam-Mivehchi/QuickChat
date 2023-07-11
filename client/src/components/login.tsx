@@ -123,7 +123,7 @@ export default function Login() {
                <div onClick={() => {
                   setRegistration(prev => !prev)
                   setSpin(true)
-               }} className=" link link-secondary link-hover p-0 underline">{registration ? "Register" : "Login"}</div>
+               }} className=" link link-secondary link-hover p-0 underline">{registration ? "Login" : "Register"}</div>
             </label>
             {state.isError ? (
                <div>
