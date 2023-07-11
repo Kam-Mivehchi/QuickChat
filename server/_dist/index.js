@@ -8,7 +8,7 @@ const express_1 = __importDefault(require("express"));
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
 const routes_1 = __importDefault(require("./routes"));
-// import { connect } from 'mongoose';
+const path_1 = __importDefault(require("path"));
 const connection_1 = __importDefault(require("./config/connection"));
 const cors_1 = __importDefault(require("cors"));
 require("dotenv/config");
@@ -19,7 +19,11 @@ app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 app.use(routes_1.default);
+if (process.env.NODE_ENV === 'production') {
+    app.use(express_1.default.static(path_1.default.join(__dirname, '../client/build')));
+}
 const httpServer = (0, http_1.createServer)(app);
+// if we're in production, serve client/build as static assets
 const io = new socket_io_1.Server(httpServer, {
     pingTimeout: 60000,
     cors: {

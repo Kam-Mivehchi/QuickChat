@@ -3,7 +3,8 @@ import express, { Express } from "express"
 import { createServer } from "http";
 import { Server } from "socket.io";
 import routes from './routes';
-// import { connect } from 'mongoose';
+import path from "path"
+
 import db from './config/connection'
 import cors from "cors";
 import 'dotenv/config'
@@ -19,8 +20,11 @@ app.use(cors());
 
 
 app.use(routes)
+if (process.env.NODE_ENV === 'production') {
+   app.use(express.static(path.join(__dirname, '../client/build')));
+}
 const httpServer = createServer(app);
-
+// if we're in production, serve client/build as static assets
 
 const io = new Server(httpServer, {
    pingTimeout: 60000,
